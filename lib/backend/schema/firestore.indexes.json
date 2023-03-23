@@ -1,0 +1,18 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "type",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "typeName",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "time_created",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "786866713000",
+    "firebase_url": "https://matcha-63c18-default-rtdb.firebaseio.com",
+    "project_id": "matcha-63c18",
+    "storage_bucket": "matcha-63c18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786866713000:android:6e33945da8c05406802d9d",
+        "android_client_info": {
+          "package_name": "com.flutterflow.homeU"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786866713000-msovs7tgcjgff50f72tfqr9c4rs6iu9f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1-Aeyrw3XdA_lvsCfx5Dd25WzgKcYC2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786866713000-79qv2r89bi2d961hfnlnpbhdbuc2l9r5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "786866713000-2t56i463bcp96o72qq41tta24lict09l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flutterflow.homeU"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
