@@ -308,7 +308,23 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                             final listViewActionsRecord = listViewActionsRecordList[listViewIndex];
 
                           // Add embedded query here
+                          return StreamBuilder<List<ActionsRecord>>(
+                            stream: queryActionsRecord(
+                              parent: widget.types,
+                              queryBuilder: (actionsRecord) =>
+                                  actionsRecord.whereArrayContainsAny(
+                                      'checks',
+                                      itemDisplayScannedItemsRecord!.variables!
+                                          .toList()),
+                            ),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return CircularProgressIndicator();
+                              }
+                              // final groupDocs = snapshot.data!;
                           
+                            bool userPresent = true;
+
                             bool allChecksPresent = listViewActionsRecord.checks!.every((element) => itemDisplayScannedItemsRecord!.variables!.contains(element));
                             return Visibility(
                               visible: allChecksPresent,
@@ -349,7 +365,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                 ),
                               ),
                             );
-                          },
+                      },);},
                         ); 
                       },
                     ),
