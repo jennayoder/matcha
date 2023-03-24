@@ -308,18 +308,17 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                             final listViewActionsRecord = listViewActionsRecordList[listViewIndex];
 
                           // Add embedded query here
-                          return StreamBuilder<List<ActionsRecord>>(
-                            stream: queryActionsRecord(
+                          return StreamBuilder<List<GroupsRecord>>(
+                            stream: queryGroupsRecord(
                               parent: widget.types,
-                              queryBuilder: (actionsRecord) =>
-                                  actionsRecord.whereArrayContainsAny(
-                                      'checks',
-                                      itemDisplayScannedItemsRecord!.variables!
-                                          .toList()),
+                              queryBuilder: (groupsRecord) =>
+                                  groupsRecord.where('users', arrayContains: currentUserReference),
                             ),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
-                                return CircularProgressIndicator();
+                                return CircularProgressIndicator(
+                                  color: FlutterFlowTheme.of(context).primaryColor,
+                                );
                               }
                               // final groupDocs = snapshot.data!;
                           
