@@ -12,11 +12,9 @@ import 'package:provider/provider.dart';
 
 class ItemDisplayModel extends FlutterFlowModel {
   /// Initialization and disposal methods.
-
   void initState(BuildContext context) {}
 
   void dispose() {}
 
   /// Additional helper methods are added here.
-
 }

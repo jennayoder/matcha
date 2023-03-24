@@ -1,3 +1,4 @@
+import '../backend/schema/groups_record.dart';
 import '/auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -81,6 +82,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
             itemDisplayScannedItemsRecordList.isNotEmpty
                 ? itemDisplayScannedItemsRecordList.first
                 : null;
+        final veriablesLength = itemDisplayScannedItemsRecord!.variables!.length;
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: Color(0xFFEAEAEA),
@@ -303,20 +305,13 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                           scrollDirection: Axis.vertical,
                           itemCount: listViewActionsRecordList.length,
                           itemBuilder: (context, listViewIndex) {
-                            final listViewActionsRecord =
-                                listViewActionsRecordList[listViewIndex];
+                            final listViewActionsRecord = listViewActionsRecordList[listViewIndex];
+
+                          // Add embedded query here
+                          
+                            bool allChecksPresent = listViewActionsRecord.checks!.every((element) => itemDisplayScannedItemsRecord!.variables!.contains(element));
                             return Visibility(
-                              visible: listViewActionsRecord.checks!
-                                      .toList()
-                                      .contains(itemDisplayScannedItemsRecord!
-                                          .variables!
-                                          .toList()
-                                          .first) &&
-                                  listViewActionsRecord.checks!
-                                      .toList()
-                                      .contains(itemDisplayScannedItemsRecord!
-                                          .variables!
-                                          .toList()[1]),
+                              visible: allChecksPresent,
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     20.0, 0.0, 20.0, 5.0),
@@ -355,7 +350,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                               ),
                             );
                           },
-                        );
+                        ); 
                       },
                     ),
                   ),
