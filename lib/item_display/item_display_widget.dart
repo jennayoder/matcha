@@ -321,8 +321,14 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                 );
                               }
                               // final groupDocs = snapshot.data!;
-                          
-                            bool userPresent = true;
+                              List<GroupsRecord> groupsRecordList = snapshot.data!;
+                              if (snapshot.data!.isEmpty){
+                                return Container();
+                              }
+                              final listViewGroupsRecord = groupsRecordList.isNotEmpty
+                                    ? groupsRecordList.first
+                                    : null;
+                              // bool userPresent = listViewGroupsRecord.users!.toList().contains(currentUserReference.id);
 
                             bool allChecksPresent = listViewActionsRecord.checks!.every((element) => itemDisplayScannedItemsRecord!.variables!.contains(element));
                             return Visibility(
