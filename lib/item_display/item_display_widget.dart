@@ -328,11 +328,20 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                               final listViewGroupsRecord = groupsRecordList.isNotEmpty
                                     ? groupsRecordList.first
                                     : null;
-                              // bool userPresent = listViewGroupsRecord.users!.toList().contains(currentUserReference.id);
+
+                              bool userPresent = false;
+                              for (final document in groupsRecordList) {
+                                    final docReference = document.reference;
+                                    if (listViewActionsRecord.groups!.contains(docReference)) {
+                                      userPresent = true;
+                                      break;
+                                    }
+                              }
+                              // bool userPresent = listViewActionsRecord.groups!.toList().contians(listViewGroupsRecord.reference);
 
                             bool allChecksPresent = listViewActionsRecord.checks!.every((element) => itemDisplayScannedItemsRecord!.variables!.contains(element));
                             return Visibility(
-                              visible: allChecksPresent,
+                              visible: allChecksPresent && userPresent,
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     20.0, 0.0, 20.0, 5.0),
