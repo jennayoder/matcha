@@ -1,4 +1,3 @@
-import '../backend/schema/groups_record.dart';
 import '/auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -10,8 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'item_display_model.dart';
-export 'item_display_model.dart';
 
 class ItemDisplayWidget extends StatefulWidget {
   const ItemDisplayWidget({
@@ -270,8 +270,9 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                         );
                       },
                     ),
-                  ),
+                  ),                  
                   Padding(
+                    // Map<String, dynamic>? actionsRecord;
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
                     child: StreamBuilder<List<ActionsRecord>>(
@@ -297,8 +298,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                             ),
                           );
                         }
-                        List<ActionsRecord> listViewActionsRecordList =
-                            snapshot.data!;
+                        List<ActionsRecord> listViewActionsRecordList = snapshot.data!;
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
@@ -337,7 +337,6 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                       break;
                                     }
                               }
-                              // bool userPresent = listViewActionsRecord.groups!.toList().contians(listViewGroupsRecord.reference);
 
                             bool allChecksPresent = listViewActionsRecord.checks!.every((element) => itemDisplayScannedItemsRecord!.variables!.contains(element));
                             return Visibility(
@@ -347,13 +346,25 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                     20.0, 0.0, 20.0, 5.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            LogMessageWidget(),
-                                      ),
+                                    final logsCreateData = createLogsRecordData(
+                                      action: listViewActionsRecord.actionName,
                                     );
+                                    var logsRecordReference =
+                                        LogsRecord.createDoc(itemDisplayScannedItemsRecord!.reference);
+                                    await logsRecordReference.set(logsCreateData);
+                                    _model.logRef =
+                                        LogsRecord.getDocumentFromData(logsCreateData, logsRecordReference);
+                                    // if (listViewActionsRecord.commands.customLog!) {
+                                    //   await Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //       builder: (context) => LogMessageWidget(
+                                    //         logRef: _model.logRef!.reference,
+                                    //       ),
+                                    //     ),
+                                    //   );
+                                    // }
+                                    setState(() {});
                                   },
                                   text: listViewActionsRecord.actionName!,
                                   options: FFButtonOptions(
