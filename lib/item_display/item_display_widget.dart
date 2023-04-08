@@ -339,6 +339,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                               }
 
                             bool allChecksPresent = listViewActionsRecord.checks!.every((element) => itemDisplayScannedItemsRecord!.variables!.contains(element));
+                            // allChecksPresent = false;
                             return Visibility(
                               visible: allChecksPresent && userPresent,
                               child: Padding(

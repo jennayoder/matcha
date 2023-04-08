@@ -12,11 +12,11 @@ abstract class ActionsRecord
 
   BuiltList<String>? get checks;
 
-  BuiltList<String>? get commands;
-
   String? get actionName;
 
   BuiltList<DocumentReference>? get groups;
+
+  CommandsStruct get commands;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -26,9 +26,9 @@ abstract class ActionsRecord
 
   static void _initializeBuilder(ActionsRecordBuilder builder) => builder
     ..checks = ListBuilder()
-    ..commands = ListBuilder()
     ..actionName = ''
-    ..groups = ListBuilder();
+    ..groups = ListBuilder()
+    ..commands = CommandsStructBuilder();
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
       parent != null
@@ -58,17 +58,21 @@ abstract class ActionsRecord
 
 Map<String, dynamic> createActionsRecordData({
   String? actionName,
+  CommandsStruct? commands,
 }) {
   final firestoreData = serializers.toFirestore(
     ActionsRecord.serializer,
     ActionsRecord(
       (a) => a
         ..checks = null
-        ..commands = null
         ..actionName = actionName
-        ..groups = null,
+        ..groups = null
+        ..commands = CommandsStructBuilder(),
     ),
   );
+
+  // Handle nested data for "commands" field.
+  addCommandsStructData(firestoreData, commands, 'commands');
 
   return firestoreData;
 }
