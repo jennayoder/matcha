@@ -5,8 +5,6 @@ export '/home_page_m_a_i_n/home_page_m_a_i_n_widget.dart'
     show HomePageMAINWidget;
 export '/edit_type/edit_type_widget.dart' show EditTypeWidget;
 export '/users/users_widget.dart' show UsersWidget;
-export '/create_state/create_state_widget.dart' show CreateStateWidget;
-export '/edit_state/edit_state_widget.dart' show EditStateWidget;
 export '/scan/scan_widget.dart' show ScanWidget;
 export '/add_item/add_item_widget.dart' show AddItemWidget;
 export '/types_page/types_page_widget.dart' show TypesPageWidget;

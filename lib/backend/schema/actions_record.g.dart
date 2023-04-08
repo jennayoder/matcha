@@ -18,7 +18,11 @@ class _$ActionsRecordSerializer implements StructuredSerializer<ActionsRecord> {
   @override
   Iterable<Object?> serialize(Serializers serializers, ActionsRecord object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object?>[];
+    final result = <Object?>[
+      'commands',
+      serializers.serialize(object.commands,
+          specifiedType: const FullType(CommandsStruct)),
+    ];
     Object? value;
     value = object.checks;
     if (value != null) {
@@ -28,14 +32,14 @@ class _$ActionsRecordSerializer implements StructuredSerializer<ActionsRecord> {
             specifiedType:
                 const FullType(BuiltList, const [const FullType(String)])));
     }
-    value = object.commands;
-    if (value != null) {
-      result
-        ..add('commands')
-        ..add(serializers.serialize(value,
-            specifiedType:
-                const FullType(BuiltList, const [const FullType(String)])));
-    }
+    // value = object.commands;
+    // if (value != null) {
+    //   result
+    //     ..add('commands')
+    //     ..add(serializers.serialize(value,
+    //         specifiedType:
+    //             const FullType(BuiltList, const [const FullType(String)])));
+    // }
     value = object.actionName;
     if (value != null) {
       result
@@ -82,12 +86,6 @@ class _$ActionsRecordSerializer implements StructuredSerializer<ActionsRecord> {
                       BuiltList, const [const FullType(String)]))!
               as BuiltList<Object?>);
           break;
-        case 'commands':
-          result.commands.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(String)]))!
-              as BuiltList<Object?>);
-          break;
         case 'actionName':
           result.actionName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
@@ -98,6 +96,11 @@ class _$ActionsRecordSerializer implements StructuredSerializer<ActionsRecord> {
                 const FullType(
                     DocumentReference, const [const FullType.nullable(Object)])
               ]))! as BuiltList<Object?>);
+          break;
+        case 'commands':
+          result.commands.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(CommandsStruct))!
+              as CommandsStruct);
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -116,11 +119,11 @@ class _$ActionsRecord extends ActionsRecord {
   @override
   final BuiltList<String>? checks;
   @override
-  final BuiltList<String>? commands;
-  @override
   final String? actionName;
   @override
   final BuiltList<DocumentReference<Object?>>? groups;
+  @override
+  final CommandsStruct commands;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -128,8 +131,15 @@ class _$ActionsRecord extends ActionsRecord {
       (new ActionsRecordBuilder()..update(updates))._build();
 
   _$ActionsRecord._(
-      {this.checks, this.commands, this.actionName, this.groups, this.ffRef})
-      : super._();
+      {this.checks,
+      this.actionName,
+      this.groups,
+      required this.commands,
+      this.ffRef})
+      : super._() {
+    BuiltValueNullFieldError.checkNotNull(
+        commands, r'ActionsRecord', 'commands');
+  }
 
   @override
   ActionsRecord rebuild(void Function(ActionsRecordBuilder) updates) =>
@@ -143,29 +153,31 @@ class _$ActionsRecord extends ActionsRecord {
     if (identical(other, this)) return true;
     return other is ActionsRecord &&
         checks == other.checks &&
-        commands == other.commands &&
         actionName == other.actionName &&
         groups == other.groups &&
+        commands == other.commands &&
         ffRef == other.ffRef;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc($jc($jc(0, checks.hashCode), commands.hashCode),
-                actionName.hashCode),
-            groups.hashCode),
-        ffRef.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, checks.hashCode);
+    _$hash = $jc(_$hash, actionName.hashCode);
+    _$hash = $jc(_$hash, groups.hashCode);
+    _$hash = $jc(_$hash, commands.hashCode);
+    _$hash = $jc(_$hash, ffRef.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'ActionsRecord')
           ..add('checks', checks)
-          ..add('commands', commands)
           ..add('actionName', actionName)
           ..add('groups', groups)
+          ..add('commands', commands)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -180,11 +192,6 @@ class ActionsRecordBuilder
       _$this._checks ??= new ListBuilder<String>();
   set checks(ListBuilder<String>? checks) => _$this._checks = checks;
 
-  ListBuilder<String>? _commands;
-  ListBuilder<String> get commands =>
-      _$this._commands ??= new ListBuilder<String>();
-  set commands(ListBuilder<String>? commands) => _$this._commands = commands;
-
   String? _actionName;
   String? get actionName => _$this._actionName;
   set actionName(String? actionName) => _$this._actionName = actionName;
@@ -194,6 +201,11 @@ class ActionsRecordBuilder
       _$this._groups ??= new ListBuilder<DocumentReference<Object?>>();
   set groups(ListBuilder<DocumentReference<Object?>>? groups) =>
       _$this._groups = groups;
+
+  CommandsStructBuilder? _commands;
+  CommandsStructBuilder get commands =>
+      _$this._commands ??= new CommandsStructBuilder();
+  set commands(CommandsStructBuilder? commands) => _$this._commands = commands;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -207,9 +219,9 @@ class ActionsRecordBuilder
     final $v = _$v;
     if ($v != null) {
       _checks = $v.checks?.toBuilder();
-      _commands = $v.commands?.toBuilder();
       _actionName = $v.actionName;
       _groups = $v.groups?.toBuilder();
+      _commands = $v.commands.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -236,20 +248,20 @@ class ActionsRecordBuilder
       _$result = _$v ??
           new _$ActionsRecord._(
               checks: _checks?.build(),
-              commands: _commands?.build(),
               actionName: actionName,
               groups: _groups?.build(),
+              commands: commands.build(),
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'checks';
         _checks?.build();
-        _$failedField = 'commands';
-        _commands?.build();
 
         _$failedField = 'groups';
         _groups?.build();
+        _$failedField = 'commands';
+        commands.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'ActionsRecord', _$failedField, e.toString());
@@ -261,4 +273,4 @@ class ActionsRecordBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

@@ -137,6 +137,7 @@ class _TypesPageWidgetState extends State<TypesPageWidget> {
                                 },
                                 child: Container(
                                   width: double.infinity,
+                                  height: 55,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryBackground,
@@ -186,7 +187,7 @@ class _TypesPageWidgetState extends State<TypesPageWidget> {
                                           children: [
                                             Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                  .fromSTEB(0.0, 7.0, 0.0, 0.0),
                                               child: Icon(
                                                 Icons.chevron_right_rounded,
                                                 color: Color(0xFF57636C),

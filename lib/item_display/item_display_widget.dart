@@ -1,4 +1,3 @@
-import '../backend/schema/groups_record.dart';
 import '/auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -10,6 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'item_display_model.dart';
 export 'item_display_model.dart';
 
@@ -20,12 +21,16 @@ class ItemDisplayWidget extends StatefulWidget {
     this.itemName,
     this.itemRef,
     this.actionName,
+    this.groupsRef,
+    this.logRef,
   }) : super(key: key);
 
   final DocumentReference? types;
   final String? itemName;
   final DocumentReference? itemRef;
   final ActionsRecord? actionName;
+  final DocumentReference? groupsRef;
+  final DocumentReference? logRef;
 
   @override
   _ItemDisplayWidgetState createState() => _ItemDisplayWidgetState();
@@ -193,86 +198,6 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                   ),
                   Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Status:',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              10.0, 0.0, 0.0, 0.0),
-                          child: Text(
-                            itemDisplayScannedItemsRecord!.variables!
-                                .toList()
-                                .first,
-                            style: FlutterFlowTheme.of(context).bodyText1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Groups:',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                    child: StreamBuilder<List<GroupsRecord>>(
-                      stream: queryGroupsRecord(
-                        parent: widget.types,
-                      ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                              ),
-                            ),
-                          );
-                        }
-                        List<GroupsRecord> listViewGroupsRecordList =
-                            snapshot.data!;
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: listViewGroupsRecordList.length,
-                          itemBuilder: (context, listViewIndex) {
-                            final listViewGroupsRecord =
-                                listViewGroupsRecordList[listViewIndex];
-                            return Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
-                              child: Text(
-                                listViewGroupsRecord.groupName!,
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
                     child: StreamBuilder<List<ActionsRecord>>(
                       stream: queryActionsRecord(
@@ -297,8 +222,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                             ),
                           );
                         }
-                        List<ActionsRecord> listViewActionsRecordList =
-                            snapshot.data!;
+                        List<ActionsRecord> listViewActionsRecordList = snapshot.data!;
                         return ListView.builder(
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
@@ -308,22 +232,68 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                             final listViewActionsRecord = listViewActionsRecordList[listViewIndex];
 
                           // Add embedded query here
-                          
+                          return StreamBuilder<List<GroupsRecord>>(
+                            stream: queryGroupsRecord(
+                              parent: widget.types,
+                              queryBuilder: (groupsRecord) =>
+                                  groupsRecord.where('users', arrayContains: currentUserReference),
+                            ),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return CircularProgressIndicator(
+                                  color: FlutterFlowTheme.of(context).primaryColor,
+                                );
+                              }
+                              // final groupDocs = snapshot.data!;
+                              List<GroupsRecord> groupsRecordList = snapshot.data!;
+                              if (snapshot.data!.isEmpty){
+                                return Container();
+                              }
+                              final listViewGroupsRecord = groupsRecordList.isNotEmpty
+                                    ? groupsRecordList.first
+                                    : null;
+
+                              bool userPresent = false;
+                              for (final document in groupsRecordList) {
+                                    final docReference = document.reference;
+                                    if (listViewActionsRecord.groups!.contains(docReference)) {
+                                      userPresent = true;
+                                      break;
+                                    }
+                              }
+
                             bool allChecksPresent = listViewActionsRecord.checks!.every((element) => itemDisplayScannedItemsRecord!.variables!.contains(element));
+                            // allChecksPresent = false;
                             return Visibility(
-                              visible: allChecksPresent,
+                              visible: allChecksPresent && userPresent,
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     20.0, 0.0, 20.0, 5.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            LogMessageWidget(),
-                                      ),
-                                    );
+                                    if (listViewActionsRecord.commands.addLog!) {
+                                      final logsCreateData = createLogsRecordData(
+                                        action: listViewActionsRecord.actionName,
+                                        user: currentUserReference,
+                                        // 'time_created': FieldValue.serverTimestamp(),
+                                      );
+                                      var logsRecordReference =
+                                          LogsRecord.createDoc(itemDisplayScannedItemsRecord!.reference);
+                                      await logsRecordReference.set(logsCreateData);
+                                      _model.logRef =
+                                          LogsRecord.getDocumentFromData(logsCreateData, logsRecordReference);
+                                    }
+                                    if (listViewActionsRecord.commands.customLog!) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LogMessageWidget(
+                                            logRef: _model.logRef!.reference,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    setState(() {});
                                   },
                                   text: listViewActionsRecord.actionName!,
                                   options: FFButtonOptions(
@@ -349,7 +319,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                 ),
                               ),
                             );
-                          },
+                      },);},
                         ); 
                       },
                     ),

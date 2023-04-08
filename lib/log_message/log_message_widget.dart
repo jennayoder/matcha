@@ -15,9 +15,11 @@ class LogMessageWidget extends StatefulWidget {
   const LogMessageWidget({
     Key? key,
     this.actionName,
+    this.logRef,
   }) : super(key: key);
 
   final DocumentReference? actionName;
+  final DocumentReference? logRef;
 
   @override
   _LogMessageWidgetState createState() => _LogMessageWidgetState();
@@ -189,17 +191,10 @@ class _LogMessageWidgetState extends State<LogMessageWidget> {
                                 100.0, 0.0, 100.0, 0.0),
                             child: FFButtonWidget(
                               onPressed: () async {
-                                final logsCreateData = {
-                                  ...createLogsRecordData(
-                                    user: currentUserReference,
-                                    message: _model.tlogMessageController.text,
-                                    action: widget.actionName?.id,
-                                  ),
-                                  'timeCreated': FieldValue.serverTimestamp(),
-                                };
-                                await LogsRecord.createDoc(
-                                        logMessageScannedItemsRecord!.reference)
-                                    .set(logsCreateData);
+                                final logsUpdateData = createLogsRecordData(
+                                  message: _model.tlogMessageController.text,
+                                );
+                                await widget.logRef!.update(logsUpdateData);
                                 Navigator.pop(context);
                               },
                               text: 'Done',

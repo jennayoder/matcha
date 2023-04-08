@@ -23,6 +23,7 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   ActionsRecord,
   GroupsRecord,
   LogsRecord,
+  CommandsStruct,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DocumentReferenceSerializer())
