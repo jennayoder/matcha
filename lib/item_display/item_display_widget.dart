@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'item_display_model.dart';
+export 'item_display_model.dart';
 
 class ItemDisplayWidget extends StatefulWidget {
   const ItemDisplayWidget({
@@ -20,12 +21,16 @@ class ItemDisplayWidget extends StatefulWidget {
     this.itemName,
     this.itemRef,
     this.actionName,
+    this.groupsRef,
+    this.logRef,
   }) : super(key: key);
 
   final DocumentReference? types;
   final String? itemName;
   final DocumentReference? itemRef;
   final ActionsRecord? actionName;
+  final DocumentReference? groupsRef;
+  final DocumentReference? logRef;
 
   @override
   _ItemDisplayWidgetState createState() => _ItemDisplayWidgetState();
@@ -193,87 +198,6 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                   ),
                   Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Status:',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              10.0, 0.0, 0.0, 0.0),
-                          child: Text(
-                            itemDisplayScannedItemsRecord!.variables!
-                                .toList()
-                                .first,
-                            style: FlutterFlowTheme.of(context).bodyText1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Groups:',
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                    child: StreamBuilder<List<GroupsRecord>>(
-                      stream: queryGroupsRecord(
-                        parent: widget.types,
-                      ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                              ),
-                            ),
-                          );
-                        }
-                        List<GroupsRecord> listViewGroupsRecordList =
-                            snapshot.data!;
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: listViewGroupsRecordList.length,
-                          itemBuilder: (context, listViewIndex) {
-                            final listViewGroupsRecord =
-                                listViewGroupsRecordList[listViewIndex];
-                            return Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 5.0, 0.0, 0.0),
-                              child: Text(
-                                listViewGroupsRecord.groupName!,
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),                  
-                  Padding(
-                    // Map<String, dynamic>? actionsRecord;
-                    padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
                     child: StreamBuilder<List<ActionsRecord>>(
                       stream: queryActionsRecord(
@@ -347,24 +271,28 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                     20.0, 0.0, 20.0, 5.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    final logsCreateData = createLogsRecordData(
-                                      action: listViewActionsRecord.actionName,
-                                    );
-                                    var logsRecordReference =
-                                        LogsRecord.createDoc(itemDisplayScannedItemsRecord!.reference);
-                                    await logsRecordReference.set(logsCreateData);
-                                    _model.logRef =
-                                        LogsRecord.getDocumentFromData(logsCreateData, logsRecordReference);
-                                    // if (listViewActionsRecord.commands.customLog!) {
-                                    //   await Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) => LogMessageWidget(
-                                    //         logRef: _model.logRef!.reference,
-                                    //       ),
-                                    //     ),
-                                    //   );
-                                    // }
+                                    if (listViewActionsRecord.commands.addLog!) {
+                                      final logsCreateData = createLogsRecordData(
+                                        action: listViewActionsRecord.actionName,
+                                        user: currentUserReference,
+                                        // 'time_created': FieldValue.serverTimestamp(),
+                                      );
+                                      var logsRecordReference =
+                                          LogsRecord.createDoc(itemDisplayScannedItemsRecord!.reference);
+                                      await logsRecordReference.set(logsCreateData);
+                                      _model.logRef =
+                                          LogsRecord.getDocumentFromData(logsCreateData, logsRecordReference);
+                                    }
+                                    if (listViewActionsRecord.commands.customLog!) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LogMessageWidget(
+                                            logRef: _model.logRef!.reference,
+                                          ),
+                                        ),
+                                      );
+                                    }
                                     setState(() {});
                                   },
                                   text: listViewActionsRecord.actionName!,
