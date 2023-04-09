@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/log_message/log_message_widget.dart';
+import '/send_email/send_email_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -289,6 +290,15 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                         MaterialPageRoute(
                                           builder: (context) => LogMessageWidget(
                                             logRef: _model.logRef!.reference,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    if (listViewActionsRecord.commands.sendEmail!) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SendEmailWidget(
                                           ),
                                         ),
                                       );

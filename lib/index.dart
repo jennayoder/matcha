@@ -11,6 +11,7 @@ export '/types_page/types_page_widget.dart' show TypesPageWidget;
 export '/items_page/items_page_widget.dart' show ItemsPageWidget;
 export '/item_display/item_display_widget.dart' show ItemDisplayWidget;
 export '/log_message/log_message_widget.dart' show LogMessageWidget;
+export '/send_email/send_email_widget.dart' show SendEmailWidget;
 export '/profile_page/profile_page_widget.dart' show ProfilePageWidget;
 export '/edit_profile/edit_profile_widget.dart' show EditProfileWidget;
 export '/forgot_password/forgot_password_widget.dart' show ForgotPasswordWidget;
