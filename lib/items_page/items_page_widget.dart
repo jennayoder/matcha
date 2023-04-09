@@ -17,10 +17,12 @@ class ItemsPageWidget extends StatefulWidget {
     Key? key,
     this.types,
     this.itemData,
+    this.groupsRef,
   }) : super(key: key);
 
   final DocumentReference? types;
   final ScannedItemsRecord? itemData;
+  final DocumentReference? groupsRef;
 
   @override
   _ItemsPageWidgetState createState() => _ItemsPageWidgetState();
@@ -154,6 +156,7 @@ class _ItemsPageWidgetState extends State<ItemsPageWidget> {
                                   MaterialPageRoute(
                                     builder: (context) => ItemDisplayWidget(
                                       itemName: listViewScannedItemsRecord.name,
+                                      itemRef: typeItemScannedItemsRecord!.reference,
                                     ),
                                   ),
                                 );

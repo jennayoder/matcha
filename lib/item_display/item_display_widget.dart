@@ -303,6 +303,22 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                         ),
                                       );
                                     }
+                                    final addVarLength = listViewActionsRecord.commands.addVar?.length ?? 0;
+                                    if ( addVarLength > 0) {
+                                      print("items in addVar = $addVarLength");
+                                      final scannedItemsUpdateData1 = {
+                                      'variables': FieldValue.arrayUnion(
+                                          [listViewActionsRecord.commands.addVar?.toList()?.first]),
+                                      };
+                                      // print(listViewActionsRecord.commands.addVar?.toList()?.first);
+                                      await widget.itemRef?.update(scannedItemsUpdateData1);
+                                    }
+      
+                                    // final scannedItemsUpdateData2 = {
+                                    //   'variables': FieldValue.arrayRemove(
+                                    //       [listViewActionsRecord.commands.removeVar?.toList()?.first]),
+                                    // };
+                                    // await widget.itemRef!.update(scannedItemsUpdateData2);
                                     setState(() {});
                                   },
                                   text: listViewActionsRecord.actionName!,
