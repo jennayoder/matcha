@@ -15,6 +15,8 @@ class HomePageMAINModel extends FlutterFlowModel {
   // State field(s) for typeName widget.
   TextEditingController? typeNameController;
   String? Function(BuildContext, String?)? typeNameControllerValidator;
+  // Stores action output result for [Backend Call - Create Document] action in Button widget.
+  TypeRecord? createTypeOutput;
 
   /// Initialization and disposal methods.
 

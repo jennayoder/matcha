@@ -1,3 +1,4 @@
+import '/actions/actions_widget.dart';
 import '/auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -6,7 +7,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/main.dart';
 import '/users/users_widget.dart';
-import '/actions/actions_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -119,7 +119,9 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
                 ),
               ),
               StreamBuilder<List<GroupsRecord>>(
-                stream: queryGroupsRecord(),
+                stream: queryGroupsRecord(
+                  parent: widget.typeRef,
+                ),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
                   if (!snapshot.hasData) {
@@ -291,7 +293,7 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
                             height: 40,
                             padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                             iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            color: Color(0xE273926C),
+                            color: FlutterFlowTheme.of(context).primaryColor,
                             textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                                   fontFamily: 'Urbanist',
                                   color: Colors.white,

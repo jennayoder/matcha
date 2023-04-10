@@ -16,6 +16,7 @@ class HomePageMAINWidget extends StatefulWidget {
     Key? key,
     this.userRole,
     this.typeName,
+    this.typeRef,
     String? stateName,
   })  : this.stateName = stateName ?? 'Init',
         super(key: key);
@@ -23,6 +24,8 @@ class HomePageMAINWidget extends StatefulWidget {
   final String? userRole;
   final String? typeName;
   final String stateName;
+  final DocumentReference? typeRef;
+
 
   @override
   _HomePageMAINWidgetState createState() => _HomePageMAINWidgetState();
@@ -97,7 +100,7 @@ class _HomePageMAINWidgetState extends State<HomePageMAINWidget> {
                 children: [
                   Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(5.0, 10.0, 0.0, 0.0),
+                        EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 0.0, 0.0),
                     child: AuthUserStreamWidget(
                       builder: (context) => Text(
                         'Hello, ${valueOrDefault<String>(
@@ -141,7 +144,7 @@ class _HomePageMAINWidgetState extends State<HomePageMAINWidget> {
                     Expanded(
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
-                            15.0, 0.0, 15.0, 0.0),
+                            20.0, 0.0, 15.0, 0.0),
                         child: Text(
                           'Enter the name of the type you would like to create. ',
                           textAlign: TextAlign.justify,
@@ -227,22 +230,26 @@ class _HomePageMAINWidgetState extends State<HomePageMAINWidget> {
                           EdgeInsetsDirectional.fromSTEB(90.0, 0.0, 0.0, 0.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          final typeCreateData = {
-                            ...createTypeRecordData(
+                          final typeCreateData = createTypeRecordData(
                               owner: currentUserReference,
                               typeName: _model.typeNameController.text,
-                            ),
-                            'time_created': FieldValue.serverTimestamp(),
-                          };
-                          await TypeRecord.collection.doc().set(typeCreateData);
+                          );
+                          var typeRecordReference = TypeRecord.collection.doc();
+                          await typeRecordReference.set(typeCreateData);
+                          _model.createTypeOutput =
+                              TypeRecord.getDocumentFromData(
+                                  typeCreateData, typeRecordReference);                        
                           await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => EditTypeWidget(
                                 typeName: _model.typeNameController.text,
+                                typeRef: _model.createTypeOutput!.reference,
                               ),
                             ),
                           );
+
+                          setState(() {});
                         },
                         text: 'Create Type',
                         options: FFButtonOptions(
