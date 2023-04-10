@@ -252,6 +252,7 @@ class _ItemsPageWidgetState extends State<ItemsPageWidget> {
                               MaterialPageRoute(
                                 builder: (context) => EditTypeWidget(
                                   typeName: widget.types?.id,
+                                  typeRef: widget.types,
                                 ),
                               ),
                             );

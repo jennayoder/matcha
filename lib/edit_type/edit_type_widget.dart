@@ -58,7 +58,9 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Scaffold(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      child: Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
@@ -78,20 +80,36 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          widget.typeName,
-          style: FlutterFlowTheme.of(context).title2.override(
+          title: StreamBuilder<TypeRecord>(
+            stream: TypeRecord.getDocument(widget.typeRef!),
+            builder: (context, snapshot) {
+              // Customize what your widget looks like when it's loading.
+              if (!snapshot.hasData) {
+                return Center(
+                  child: SizedBox(
+                    width: 50.0,
+                    height: 50.0,
+                    child: CircularProgressIndicator(
+                      color: FlutterFlowTheme.of(context).primaryColor,
+                    ),
+                  ),
+                );
+              }
+              final textTypeRecord = snapshot.data!;
+              return Text(
+                textTypeRecord.typeName!,
+                style: FlutterFlowTheme.of(context).title1.override(
                 fontFamily: 'Urbanist',
                 color: FlutterFlowTheme.of(context).primaryColor,
               ),
+              );
+            },
         ),
         actions: [],
         centerTitle: false,
         elevation: 2,
       ),
       body: SafeArea(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
