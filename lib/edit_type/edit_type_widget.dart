@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/main.dart';
 import '/users/users_widget.dart';
+import '/actions/actions_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -253,6 +254,49 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
                                       fontFamily: 'Urbanist',
                                       color: Colors.white,
                                     ),
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(100, 0, 100, 0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ActionsWidget(
+                                  typeRef: widget.typeRef,
+                                ),
+                              ),
+                            );
+                          },
+                          text: 'Actions',
+                          options: FFButtonOptions(
+                            width: 130,
+                            height: 40,
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                            color: Color(0xE273926C),
+                            textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                                  fontFamily: 'Urbanist',
+                                  color: Colors.white,
+                                ),
+                            elevation: 2,
                             borderSide: BorderSide(
                               color: Colors.transparent,
                               width: 1,
