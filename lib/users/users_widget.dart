@@ -1,10 +1,12 @@
 import '/auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/edit_type/edit_type_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -80,12 +82,26 @@ class _UsersWidgetState extends State<UsersWidget> {
           appBar: AppBar(
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             automaticallyImplyLeading: false,
+            leading: FlutterFlowIconButton(
+              borderColor: Colors.transparent,
+              borderRadius: 30,
+              borderWidth: 1,
+              buttonSize: 60,
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                color: FlutterFlowTheme.of(context).primaryColor,
+                size: 30,
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+              },
+            ),
             title: Text(
               valueOrDefault<String>(
                 widget.groupName,
                 'Create a group',
               ),
-              style: FlutterFlowTheme.of(context).title2.override(
+              style: FlutterFlowTheme.of(context).title1.override(
                     fontFamily: 'Urbanist',
                     color: FlutterFlowTheme.of(context).primaryColor,
                   ),
@@ -107,11 +123,9 @@ class _UsersWidgetState extends State<UsersWidget> {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(20, 5, 20, 10),
+                            padding: EdgeInsetsDirectional.fromSTEB(20, 5, 20, 10),
                             child: StreamBuilder<GroupsRecord>(
-                              stream:
-                                  GroupsRecord.getDocument(widget.groupRef!),
+                              stream: GroupsRecord.getDocument(widget.groupRef!),
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
@@ -120,30 +134,41 @@ class _UsersWidgetState extends State<UsersWidget> {
                                       width: 50,
                                       height: 50,
                                       child: CircularProgressIndicator(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
+                                        color: FlutterFlowTheme.of(context).primaryColor,
                                       ),
                                     ),
                                   );
                                 }
                                 final groupNameGroupsRecord = snapshot.data!;
                                 return TextFormField(
-                                  controller: _model.groupNameController ??=
-                                      TextEditingController(
+                                  controller: _model.groupNameController ??= TextEditingController(
                                     text: groupNameGroupsRecord.groupName,
                                   ),
+                                  onChanged: (_) => EasyDebounce.debounce(
+                                    '_model.groupNameController',
+                                    Duration(milliseconds: 2000),
+                                    () async {
+                                      final groupsUpdateData = createGroupsRecordData(
+                                        groupName: _model.groupNameController.text,
+                                      );
+                                      await widget.groupRef!.update(groupsUpdateData);
+                                    },
+                                  ),
+                                  onFieldSubmitted: (_) async {
+                                    final groupsUpdateData = createGroupsRecordData(
+                                      groupName: groupNameGroupsRecord.groupName,
+                                    );
+                                    await widget.groupRef!.update(groupsUpdateData);
+                                  },
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Group',
-                                    labelStyle:
-                                        FlutterFlowTheme.of(context).bodyText1,
+                                    labelStyle: FlutterFlowTheme.of(context).subtitle2,
                                     hintText: 'Enter group name here',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodyText1,
+                                    hintStyle: FlutterFlowTheme.of(context).subtitle2,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .lineGray,
+                                        color: FlutterFlowTheme.of(context).lineGray,
                                         width: 2,
                                       ),
                                       borderRadius: BorderRadius.circular(8),
@@ -170,20 +195,17 @@ class _UsersWidgetState extends State<UsersWidget> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     filled: true,
-                                    fillColor: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    contentPadding:
-                                        EdgeInsetsDirectional.fromSTEB(
-                                            16, 24, 0, 24),
+                                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                                    contentPadding: EdgeInsetsDirectional.fromSTEB(16, 24, 0, 24),
                                   ),
                                   style: FlutterFlowTheme.of(context).subtitle2,
-                                  validator: _model.groupNameControllerValidator
-                                      .asValidator(context),
+                                  validator: _model.groupNameControllerValidator.asValidator(context),
                                 );
                               },
                             ),
                           ),
                         ),
+
                       ],
                     ),
                   ),
@@ -298,59 +320,6 @@ class _UsersWidgetState extends State<UsersWidget> {
                           },
                         );
                       },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 100, 0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(100, 0, 100, 0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                final groupsUpdateData = createGroupsRecordData(
-                                  groupName: valueOrDefault<String>(
-                                    _model.groupNameController.text,
-                                    'New Group',
-                                  ),
-                                );
-                                await widget.groupRef!.update(groupsUpdateData);
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => EditTypeWidget(),
-                                  ),
-                                );
-                              },
-                              text: 'Done',
-                              options: FFButtonOptions(
-                                width: 130,
-                                height: 40,
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                                iconPadding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Urbanist',
-                                      color: Colors.white,
-                                    ),
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ],
