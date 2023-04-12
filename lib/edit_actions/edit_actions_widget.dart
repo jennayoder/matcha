@@ -102,9 +102,9 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
               ),
               title: Text(
                 'Edit Action',
-                style: FlutterFlowTheme.of(context).title1.override(
+                style: FlutterFlowTheme.of(context).title2.override(
                       fontFamily: 'Urbanist',
-                      color: FlutterFlowTheme.of(context).primaryColor,
+                      color: Color(0xE273926C),
                     ),
               ),
               actions: [],
@@ -112,598 +112,502 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
               elevation: 2,
             ),
             body: SafeArea(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(20, 5, 20, 10),
-                            child: TextFormField(
-                              controller: _model.actionNameController ??= TextEditingController(
-                                text: editActionsActionsRecord.actionName,
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(20, 5, 20, 10),
+                              child: TextFormField(
+                                controller: _model.actionNameController ??=
+                                    TextEditingController(
+                                  text: editActionsActionsRecord.actionName,
+                                ),
+                                onChanged: (_) => EasyDebounce.debounce(
+                                  '_model.actionNameController',
+                                  Duration(milliseconds: 2000),
+                                  () async {
+                                    final actionsUpdateData =
+                                        createActionsRecordData(
+                                      actionName:
+                                          _model.actionNameController.text,
+                                    );
+                                    await widget.actionRef!
+                                        .update(actionsUpdateData);
+                                  },
+                                ),
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                  labelText: 'Action Name',
+                                  labelStyle:
+                                      FlutterFlowTheme.of(context).subtitle2,
+                                  hintText: 'Enter group name here',
+                                  hintStyle:
+                                      FlutterFlowTheme.of(context).subtitle2,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          FlutterFlowTheme.of(context).lineGray,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  filled: true,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  contentPadding:
+                                      EdgeInsetsDirectional.fromSTEB(
+                                          16, 24, 0, 24),
+                                ),
+                                style: FlutterFlowTheme.of(context).title1,
+                                validator: _model.actionNameControllerValidator
+                                    .asValidator(context),
                               ),
-                              onChanged: (_) => EasyDebounce.debounce(
-                                '_model.actionNameController',
-                                Duration(milliseconds: 2000),
-                                () async {
-                                  final actionsUpdateData = createActionsRecordData(
-                                    actionName: _model.actionNameController.text,
-                                  );
-                                  await widget.actionRef!.update(actionsUpdateData);
-                                },
-                              ),
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                labelText: 'Action Name',
-                                labelStyle: FlutterFlowTheme.of(context).subtitle2,
-                                hintText: 'Enter group name here',
-                                hintStyle: FlutterFlowTheme.of(context).subtitle2,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context).lineGray,
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                filled: true,
-                                fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                                contentPadding: EdgeInsetsDirectional.fromSTEB(16, 24, 0, 24),
-                              ),
-                              style: FlutterFlowTheme.of(context).title1,
-                              validator: _model.actionNameControllerValidator.asValidator(context),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    thickness: 1,
-                  ),
-                  ListView(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    children: [
+                        ],
+                      ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
-                        child: SwitchListTile(
-                          value: _model.switchListTileValue1 ??=
-                              editActionsActionsRecord.commands.addLog!,
-                          onChanged: (newValue) async {
-                            setState(
-                                () => _model.switchListTileValue1 = newValue!);
-                            if (newValue!) {
-                              final actionsUpdateData = createActionsRecordData(
-                                commands: createCommandsStruct(
-                                  addLog: true,
-                                  clearUnsetFields: false,
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 15),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
+                              child: SwitchListTile(
+                                value: _model.switchListTileValue1 ??=
+                                    editActionsActionsRecord.commands.addLog!,
+                                onChanged: (newValue) async {
+                                  setState(() => _model.switchListTileValue1 = newValue!);
+                                  if (newValue!) {
+                                    final actionsUpdateData = createActionsRecordData(
+                                      commands: createCommandsStruct(
+                                        addLog: true,
+                                        clearUnsetFields: false,
+                                      ),
+                                    );
+                                    await widget.actionRef!.update(actionsUpdateData);
+                                  } else {
+                                    final actionsUpdateData = createActionsRecordData(
+                                      commands: createCommandsStruct(
+                                        addLog: false,
+                                        clearUnsetFields: false,
+                                      ),
+                                    );
+                                    await widget.actionRef!.update(actionsUpdateData);
+                                  }
+                                },
+                                title: Text(
+                                  'Add Log',
+                                  style: FlutterFlowTheme.of(context).subtitle2,
                                 ),
-                              );
-                              await widget.actionRef!.update(actionsUpdateData);
-                            } else {
-                              final actionsUpdateData = createActionsRecordData(
-                                commands: createCommandsStruct(
-                                  addLog: false,
-                                  clearUnsetFields: false,
+                                tileColor: FlutterFlowTheme.of(context).secondaryBackground,
+                                dense: false,
+                                controlAffinity: ListTileControlAffinity.trailing,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
+                              child: SwitchListTile(
+                                value: _model.switchListTileValue2 ??=
+                                    editActionsActionsRecord.commands.customLog!,
+                                onChanged: (newValue) async {
+                                  setState(() => _model.switchListTileValue2 = newValue!);
+                                  if (newValue!) {
+                                    final actionsUpdateData = createActionsRecordData(
+                                      commands: createCommandsStruct(
+                                        customLog: true,
+                                        clearUnsetFields: false,
+                                      ),
+                                    );
+                                    await widget.actionRef!.update(actionsUpdateData);
+                                  } else {
+                                    final actionsUpdateData = createActionsRecordData(
+                                      commands: createCommandsStruct(
+                                        customLog: false,
+                                        clearUnsetFields: false,
+                                      ),
+                                    );
+                                    await widget.actionRef!.update(actionsUpdateData);
+                                  }
+                                },
+                                title: Text(
+                                  'Add Custom Log',
+                                  style: FlutterFlowTheme.of(context).subtitle2,
                                 ),
-                              );
-                              await widget.actionRef!.update(actionsUpdateData);
-                            }
-                          },
-                          title: Text(
-                            'Add Log',
-                            style: FlutterFlowTheme.of(context).subtitle2,
+                                tileColor: FlutterFlowTheme.of(context).secondaryBackground,
+                                dense: false,
+                                controlAffinity: ListTileControlAffinity.trailing,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
+                              child: SwitchListTile(
+                                value: _model.switchListTileValue3 ??=
+                                    editActionsActionsRecord.commands.sendEmail!,
+                                onChanged: (newValue) async {
+                                  setState(() => _model.switchListTileValue3 = newValue!);
+                                  if (newValue!) {
+                                    final actionsUpdateData = createActionsRecordData(
+                                      commands: createCommandsStruct(
+                                        sendEmail: true,
+                                        clearUnsetFields: false,
+                                      ),
+                                    );
+                                    await widget.actionRef!.update(actionsUpdateData);
+                                  } else {
+                                    final actionsUpdateData = createActionsRecordData(
+                                      commands: createCommandsStruct(
+                                        sendEmail: false,
+                                        clearUnsetFields: false,
+                                      ),
+                                    );
+                                    await widget.actionRef!.update(actionsUpdateData);
+                                  }
+                                },
+                                title: Text(
+                                  'Send Email',
+                                  style: FlutterFlowTheme.of(context).subtitle2,
+                                ),
+                                tileColor: FlutterFlowTheme.of(context).secondaryBackground,
+                                dense: false,
+                                controlAffinity: ListTileControlAffinity.trailing,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(15, 0, 15, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
+                              child: Text(
+                                'Allow access to groups:',
+                                style: FlutterFlowTheme.of(context)
+                                    .subtitle2
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      fontSize: 16,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
+                        child: StreamBuilder<List<GroupsRecord>>(
+                          stream: queryGroupsRecord(
+                            parent: widget.typeRef,
                           ),
-                          tileColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          dense: false,
-                          controlAffinity: ListTileControlAffinity.trailing,
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircularProgressIndicator(
+                                    color: FlutterFlowTheme.of(context).primaryColor,
+                                  ),
+                                ),
+                              );
+                            }
+                            List<GroupsRecord> columnGroupsRecordList = snapshot.data!;
+                            return Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: List.generate(columnGroupsRecordList.length, (columnIndex) {
+                                final columnGroupsRecord = columnGroupsRecordList[columnIndex];
+                                return Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
+                                  child: Theme(
+                                    data: ThemeData(
+                                      unselectedWidgetColor: FlutterFlowTheme.of(context).alternate,
+                                    ),
+                                    child: CheckboxListTile(
+                                      value: _model.checkboxListTileValueMap[columnGroupsRecord] ??=
+                                          editActionsActionsRecord.groups!
+                                              .toList()
+                                              .contains(columnGroupsRecord.reference),
+                                      onChanged: (newValue) async {
+                                        setState(() =>
+                                            _model.checkboxListTileValueMap[columnGroupsRecord] =
+                                                newValue!);
+                                        if (newValue!) {
+                                          final actionsUpdateData = {
+                                            'groups': FieldValue.arrayUnion(
+                                                [columnGroupsRecord.reference]),
+                                          };
+                                          await widget.actionRef!.update(actionsUpdateData);
+                                        } else {
+                                          final actionsUpdateData = {
+                                            'groups': FieldValue.arrayRemove(
+                                                [columnGroupsRecord.reference]),
+                                          };
+                                          await widget.actionRef!.update(actionsUpdateData);
+                                        }
+                                      },
+                                      title: Text(
+                                        columnGroupsRecord.groupName!,
+                                        style: FlutterFlowTheme.of(context).subtitle2,
+                                      ),
+                                      tileColor: FlutterFlowTheme.of(context).secondaryBackground,
+                                      activeColor: FlutterFlowTheme.of(context).primaryColor,
+                                      dense: false,
+                                      controlAffinity: ListTileControlAffinity.trailing,
+                                    ),
+                                  ),
+                                );
+                              }),
+                            );
+                          },
                         ),
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
-                        child: SwitchListTile(
-                          value: _model.switchListTileValue2 ??=
-                              editActionsActionsRecord.commands.customLog!,
-                          onChanged: (newValue) async {
-                            setState(
-                                () => _model.switchListTileValue2 = newValue!);
-                            if (newValue!) {
-                              final actionsUpdateData = createActionsRecordData(
-                                commands: createCommandsStruct(
-                                  customLog: true,
-                                  clearUnsetFields: false,
-                                ),
-                              );
-                              await widget.actionRef!.update(actionsUpdateData);
-                            } else {
-                              final actionsUpdateData = createActionsRecordData(
-                                commands: createCommandsStruct(
-                                  customLog: false,
-                                  clearUnsetFields: false,
-                                ),
-                              );
-                              await widget.actionRef!.update(actionsUpdateData);
-                            }
-                          },
-                          title: Text(
-                            'Add Custom Log',
-                            style: FlutterFlowTheme.of(context).subtitle2,
-                          ),
-                          tileColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          dense: false,
-                          controlAffinity: ListTileControlAffinity.trailing,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Use \'+\' to add items or hold down on an item to delete it.',
+                                style: FlutterFlowTheme.of(context)
+                                    .subtitle2
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      fontSize: 16,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(15, 15, 15, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Items that must be present for the action to be visible:',
+                                style: FlutterFlowTheme.of(context)
+                                    .subtitle2
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
-                        child: SwitchListTile(
-                          value: _model.switchListTileValue3 ??=
-                              editActionsActionsRecord.commands.sendEmail!,
-                          onChanged: (newValue) async {
-                            setState(
-                                () => _model.switchListTileValue3 = newValue!);
-                            if (newValue!) {
-                              final actionsUpdateData = createActionsRecordData(
-                                commands: createCommandsStruct(
-                                  sendEmail: true,
-                                  clearUnsetFields: false,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                child: TextFormField(
+                                  controller: _model.newVariableController,
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    labelText: 'New Item',
+                                    labelStyle: FlutterFlowTheme.of(context)
+                                        .subtitle2
+                                        .override(
+                                          fontFamily: 'Urbanist',
+                                          fontSize: 14,
+                                        ),
+                                    hintText: 'Enter item here',
+                                    hintStyle: FlutterFlowTheme.of(context)
+                                        .subtitle2
+                                        .override(
+                                          fontFamily: 'Urbanist',
+                                          fontSize: 12,
+                                        ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: FlutterFlowTheme.of(context)
+                                            .lineGray,
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0x00000000),
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    filled: true,
+                                    fillColor: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    contentPadding:
+                                        EdgeInsetsDirectional.fromSTEB(
+                                            16, 18, 0, 18),
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .title1
+                                      .override(
+                                        fontFamily: 'Urbanist',
+                                        fontSize: 14,
+                                      ),
+                                  validator: _model
+                                      .newVariableControllerValidator
+                                      .asValidator(context),
                                 ),
-                              );
-                              await widget.actionRef!.update(actionsUpdateData);
-                            } else {
-                              final actionsUpdateData = createActionsRecordData(
-                                commands: createCommandsStruct(
-                                  sendEmail: false,
-                                  clearUnsetFields: false,
-                                ),
-                              );
-                              await widget.actionRef!.update(actionsUpdateData);
-                            }
-                          },
-                          title: Text(
-                            'Send Email',
-                            style: FlutterFlowTheme.of(context).subtitle2,
-                          ),
-                          tileColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          dense: false,
-                          controlAffinity: ListTileControlAffinity.trailing,
+                              ),
+                            ),
+                            FlutterFlowIconButton(
+                              borderColor: Colors.transparent,
+                              borderRadius: 30,
+                              borderWidth: 1,
+                              buttonSize: 60,
+                              icon: Icon(
+                                Icons.add,
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                size: 30,
+                              ),
+                              onPressed: () async {
+                                final actionsUpdateData = {
+                                  'checks': FieldValue.arrayUnion(
+                                      [_model.newVariableController.text]),
+                                };
+                                await widget.actionRef!
+                                    .update(actionsUpdateData);
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
-                      child: SingleChildScrollView(
+                      Builder(
+                        builder: (context) {
+                          final checks =
+                              editActionsActionsRecord.checks!.toList();
+                          return Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children:
+                                List.generate(checks.length, (checksIndex) {
+                              final checksItem = checks[checksIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    15, 0, 15, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onLongPress: () async {
+                                          final actionsUpdateData = {
+                                            'checks': FieldValue.arrayRemove(
+                                                [checksItem]),
+                                          };
+                                          await widget.actionRef!
+                                              .update(actionsUpdateData);
+                                        },
+                                        child: Card(
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    15, 3, 0, 3),
+                                            child: Text(
+                                              checksItem,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .subtitle2
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 20,
+                                                      ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(15, 0, 15, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Use \'+\' to add items or hold down on an item to delete it.',
-                                      style: FlutterFlowTheme.of(context)
-                                          .subtitle2
-                                          .override(
-                                            fontFamily: 'Urbanist',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 16,
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
                                   EdgeInsetsDirectional.fromSTEB(15, 15, 15, 0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      'Items that must be present for the action to be visible:',
-                                      style: FlutterFlowTheme.of(context)
-                                          .subtitle2
-                                          .override(
-                                            fontFamily: 'Urbanist',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 10),
-                                      child: TextFormField(
-                                        controller:
-                                            _model.newVariableController,
-                                        obscureText: false,
-                                        decoration: InputDecoration(
-                                          labelText: 'New Item',
-                                          labelStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .subtitle2,
-                                          hintText: 'Enter item here',
-                                          hintStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .subtitle2,
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .lineGray,
-                                              width: 2,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 2,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          errorBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 2,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          focusedErrorBorder:
-                                              OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 2,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          filled: true,
-                                          fillColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .secondaryBackground,
-                                          contentPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16, 24, 0, 24),
-                                        ),
-                                        style: FlutterFlowTheme.of(context)
-                                            .title1,
-                                        validator: _model
-                                            .newVariableControllerValidator
-                                            .asValidator(context),
-                                      ),
-                                    ),
-                                  ),
-                                  FlutterFlowIconButton(
-                                    borderColor: Colors.transparent,
-                                    borderRadius: 30,
-                                    borderWidth: 1,
-                                    buttonSize: 60,
-                                    icon: Icon(
-                                      Icons.add,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 30,
-                                    ),
-                                    onPressed: () async {
-                                      final actionsUpdateData = {
-                                        'checks': FieldValue.arrayUnion([
-                                          _model.newVariableController.text
-                                        ]),
-                                      };
-                                      await widget.actionRef!
-                                          .update(actionsUpdateData);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Builder(
-                              builder: (context) {
-                                final checks =
-                                    editActionsActionsRecord.checks!.toList();
-                                return Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: List.generate(checks.length,
-                                      (checksIndex) {
-                                    final checksItem = checks[checksIndex];
-                                    return Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          15, 0, 15, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Expanded(
-                                            child: InkWell(
-                                              onLongPress: () async {
-                                                final actionsUpdateData = {
-                                                  'checks':
-                                                      FieldValue.arrayRemove(
-                                                          [checksItem]),
-                                                };
-                                                await widget.actionRef!
-                                                    .update(actionsUpdateData);
-                                              },
-                                              child: Card(
-                                                clipBehavior:
-                                                    Clip.antiAliasWithSaveLayer,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(15, 0, 0, 0),
-                                                  child: Text(
-                                                    checksItem,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .subtitle2
-                                                        .override(
-                                                          fontFamily:
-                                                              'Urbanist',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryText,
-                                                          fontSize: 18,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }),
-                                );
-                              },
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15, 15, 15, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            'Variables to add when action is selected:',
-                                            style: FlutterFlowTheme.of(context)
-                                                .subtitle2
-                                                .override(
-                                                  fontFamily: 'Urbanist',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15, 5, 15, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Expanded(
-                                          child: TextFormField(
-                                            controller: _model.addVarController,
-                                            obscureText: false,
-                                            decoration: InputDecoration(
-                                              labelText: 'Add Variable',
-                                              labelStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .subtitle2,
-                                              hintText: 'Enter variable here',
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .subtitle2,
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .lineGray,
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              filled: true,
-                                              fillColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                              contentPadding:
-                                                  EdgeInsetsDirectional
-                                                      .fromSTEB(16, 24, 0, 24),
-                                            ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .title1,
-                                            validator: _model
-                                                .addVarControllerValidator
-                                                .asValidator(context),
-                                          ),
-                                        ),
-                                        FlutterFlowIconButton(
-                                          borderColor: Colors.transparent,
-                                          borderRadius: 30,
-                                          borderWidth: 1,
-                                          buttonSize: 60,
-                                          icon: Icon(
-                                            Icons.add,
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            size: 30,
-                                          ),
-                                          onPressed: () async {
-                                            final actionsUpdateData =
-                                                createActionsRecordData(
-                                              commands: createCommandsStruct(
-                                                fieldValues: {
-                                                  'addVar':
-                                                      FieldValue.arrayUnion([
-                                                    _model.addVarController.text
-                                                  ]),
-                                                },
-                                                clearUnsetFields: false,
-                                              ),
-                                            );
-                                            await widget.actionRef!
-                                                .update(actionsUpdateData);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Builder(
-                              builder: (context) {
-                                final addVar = editActionsActionsRecord
-                                        .commands.addVar
-                                        ?.toList()
-                                        ?.toList() ??
-                                    [];
-                                return Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: List.generate(addVar.length,
-                                      (addVarIndex) {
-                                    final addVarItem = addVar[addVarIndex];
-                                    return Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          15, 0, 15, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Expanded(
-                                            child: InkWell(
-                                              onLongPress: () async {
-                                                final actionsUpdateData = createActionsRecordData(
-                                                  commands: createCommandsStruct(
-                                                    fieldValues: {
-                                                      'addVar': FieldValue.arrayRemove([addVarItem]),
-                                                    },
-                                                    clearUnsetFields: false,
-                                                  ),
-                                                );
-                                                await widget.actionRef!.update(actionsUpdateData);
-                                              },
-                                              child: Card(
-                                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
-                                                  child: Text(
-                                                    addVarItem,
-                                                    style: FlutterFlowTheme.of(context).subtitle2.override(
-                                                          fontFamily: 'Urbanist',
-                                                          color: FlutterFlowTheme.of(context).primaryText,
-                                                          fontSize: 18,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  }),
-                                );
-                              },
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(15, 15, 15, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Variables to remove when action is selected:',
+                                      'Variables to add when action is selected:',
                                       style: FlutterFlowTheme.of(context)
                                           .subtitle2
                                           .override(
@@ -724,15 +628,19 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      controller: _model.removeVarController,
+                                      controller: _model.addVarController,
                                       obscureText: false,
                                       decoration: InputDecoration(
-                                        labelText: 'Remove Variable',
+                                        labelText: 'Add Variable',
                                         labelStyle: FlutterFlowTheme.of(context)
                                             .subtitle2,
                                         hintText: 'Enter variable here',
                                         hintStyle: FlutterFlowTheme.of(context)
-                                            .subtitle2,
+                                            .subtitle2
+                                            .override(
+                                              fontFamily: 'Urbanist',
+                                              fontSize: 12,
+                                            ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: FlutterFlowTheme.of(context)
@@ -771,12 +679,16 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                                             .secondaryBackground,
                                         contentPadding:
                                             EdgeInsetsDirectional.fromSTEB(
-                                                16, 24, 0, 24),
+                                                16, 18, 0, 18),
                                       ),
                                       style: FlutterFlowTheme.of(context)
-                                          .title1,
+                                          .title1
+                                          .override(
+                                            fontFamily: 'Urbanist',
+                                            fontSize: 14,
+                                          ),
                                       validator: _model
-                                          .removeVarControllerValidator
+                                          .addVarControllerValidator
                                           .asValidator(context),
                                     ),
                                   ),
@@ -796,9 +708,8 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                                           createActionsRecordData(
                                         commands: createCommandsStruct(
                                           fieldValues: {
-                                            'removeVar': FieldValue.arrayUnion([
-                                              _model.removeVarController.text
-                                            ]),
+                                            'addVar': FieldValue.arrayUnion(
+                                                [_model.addVarController.text]),
                                           },
                                           clearUnsetFields: false,
                                         ),
@@ -810,68 +721,240 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                                 ],
                               ),
                             ),
-                            Builder(
-                              builder: (context) {
-                                final removeVar = editActionsActionsRecord
-                                        .commands.removeVar
-                                        ?.toList()
-                                        ?.toList() ??
-                                    [];
-                                return Column(
+                          ],
+                        ),
+                      ),
+                      Builder(
+                        builder: (context) {
+                          final addVar = editActionsActionsRecord
+                                  .commands.addVar
+                                  ?.toList()
+                                  ?.toList() ??
+                              [];
+                          return Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children:
+                                List.generate(addVar.length, (addVarIndex) {
+                              final addVarItem = addVar[addVarIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    15, 0, 15, 0),
+                                child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  children: List.generate(removeVar.length,
-                                      (removeVarIndex) {
-                                    final removeVarItem =
-                                        removeVar[removeVarIndex];
-                                    return Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          15, 0, 15, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Expanded(
-                                            child: InkWell(
-                                              onLongPress: () async {
-                                                final actionsUpdateData = createActionsRecordData(
-                                                  commands: createCommandsStruct(
-                                                    fieldValues: {
-                                                      'removeVar': FieldValue.arrayRemove([removeVarItem]),
-                                                    },
-                                                    clearUnsetFields: false,
-                                                  ),
-                                                );
-                                                await widget.actionRef!.update(actionsUpdateData);
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onLongPress: () async {
+                                          final actionsUpdateData =
+                                              createActionsRecordData(
+                                            commands: createCommandsStruct(
+                                              fieldValues: {
+                                                'addVar':
+                                                    FieldValue.arrayRemove(
+                                                        [addVarItem]),
                                               },
-                                              child: Card(
-                                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
-                                                  child: Text(
-                                                    removeVarItem,
-                                                    style: FlutterFlowTheme.of(context).subtitle2.override(
-                                                          fontFamily: 'Urbanist',
-                                                          color: FlutterFlowTheme.of(context).primaryText,
-                                                          fontSize: 18,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
+                                              clearUnsetFields: false,
+                                            ),
+                                          );
+                                          await widget.actionRef!
+                                              .update(actionsUpdateData);
+                                        },
+                                        child: Card(
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    15, 3, 0, 3),
+                                            child: Text(
+                                              addVarItem,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .subtitle2
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 20,
+                                                      ),
                                             ),
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    );
-                                  }),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          );
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(15, 15, 15, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Variables to remove when action is selected:',
+                                style: FlutterFlowTheme.of(context)
+                                    .subtitle2
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _model.removeVarController,
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                  labelText: 'Remove Variable',
+                                  labelStyle:
+                                      FlutterFlowTheme.of(context).subtitle2,
+                                  hintText: 'Enter variable here',
+                                  hintStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Urbanist',
+                                        fontSize: 12,
+                                      ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          FlutterFlowTheme.of(context).lineGray,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  filled: true,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  contentPadding:
+                                      EdgeInsetsDirectional.fromSTEB(
+                                          16, 18, 0, 18),
+                                ),
+                                style: FlutterFlowTheme.of(context).title1,
+                                validator: _model.removeVarControllerValidator
+                                    .asValidator(context),
+                              ),
+                            ),
+                            FlutterFlowIconButton(
+                              borderColor: Colors.transparent,
+                              borderRadius: 30,
+                              borderWidth: 1,
+                              buttonSize: 60,
+                              icon: Icon(
+                                Icons.add,
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                size: 30,
+                              ),
+                              onPressed: () async {
+                                final actionsUpdateData =
+                                    createActionsRecordData(
+                                  commands: createCommandsStruct(
+                                    fieldValues: {
+                                      'addVar': FieldValue.arrayRemove(
+                                          [_model.removeVarController.text]),
+                                    },
+                                    clearUnsetFields: false,
+                                  ),
                                 );
+                                await widget.actionRef!
+                                    .update(actionsUpdateData);
                               },
                             ),
                           ],
                         ),
                       ),
-                    ),
+                      Builder(
+                        builder: (context) {
+                          final removeVar = editActionsActionsRecord
+                                  .commands.addVar
+                                  ?.toList()
+                                  ?.toList() ??
+                              [];
+                          return Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: List.generate(removeVar.length,
+                                (removeVarIndex) {
+                              final removeVarItem = removeVar[removeVarIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    15, 0, 15, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: Card(
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  15, 3, 0, 3),
+                                          child: Text(
+                                            removeVarItem,
+                                            style: FlutterFlowTheme.of(context)
+                                                .subtitle2
+                                                .override(
+                                                  fontFamily: 'Urbanist',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 20,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),

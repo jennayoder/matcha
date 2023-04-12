@@ -21,6 +21,15 @@ class EditActionsModel extends FlutterFlowModel {
   bool? switchListTileValue2;
   // State field(s) for SwitchListTile widget.
   bool? switchListTileValue3;
+  // State field(s) for CheckboxListTile widget.
+
+  Map<GroupsRecord, bool> checkboxListTileValueMap = {};
+  List<GroupsRecord> get checkboxListTileCheckedItems =>
+      checkboxListTileValueMap.entries
+          .where((e) => e.value)
+          .map((e) => e.key)
+          .toList();
+
   // State field(s) for newVariable widget.
   TextEditingController? newVariableController;
   String? Function(BuildContext, String?)? newVariableControllerValidator;

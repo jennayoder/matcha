@@ -166,6 +166,7 @@ class _ActionsWidgetState extends State<ActionsWidget> {
                               MaterialPageRoute(
                                 builder: (context) => EditActionsWidget(
                                   actionRef: listViewActionsRecord.reference,
+                                  typeRef:  widget.typeRef,
                                 ),
                               ),
                             );
