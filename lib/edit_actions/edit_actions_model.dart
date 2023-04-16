@@ -1,8 +1,10 @@
-import '/auth/auth_util.dart';
+// import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/form_field_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +32,9 @@ class EditActionsModel extends FlutterFlowModel {
           .map((e) => e.key)
           .toList();
 
+  // State field(s) for DropDown widget.
+  String? dropDownValue;
+  FormFieldController<String>? dropDownValueController;
   // State field(s) for newVariable widget.
   TextEditingController? newVariableController;
   String? Function(BuildContext, String?)? newVariableControllerValidator;

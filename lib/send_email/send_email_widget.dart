@@ -134,74 +134,6 @@ class _SendEmailWidgetState extends State<SendEmailWidget> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(15, 20, 15, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(30, 0, 30, 0),
-                            child: StreamBuilder<List<UsersRecord>>(
-                              stream: queryUsersRecord(),
-                              builder: (context, snapshot) {
-                                // Customize what your widget looks like when it's loading.
-                                if (!snapshot.hasData) {
-                                  return Center(
-                                    child: SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: CircularProgressIndicator(
-                                        color: FlutterFlowTheme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                  );
-                                }
-                                List<UsersRecord> dropDownUsersRecordList =
-                                    snapshot.data!;
-                                return FlutterFlowDropDown<String>(
-                                  controller: _model.dropDownController ??=
-                                      FormFieldController<String>(null),
-                                  options: dropDownUsersRecordList
-                                      .map((e) => e.email)
-                                      .withoutNulls
-                                      .toList()
-                                      .toList(),
-                                  onChanged: (val) => setState(
-                                      () => _model.dropDownValue = val),
-                                  width: 180,
-                                  height: 50,
-                                  // searchHintTextStyle:
-                                  //     FlutterFlowTheme.of(context)
-                                  //         .bodyLarge
-                                  //         .override(
-                                  //           fontFamily: '',
-                                  //           color: FlutterFlowTheme.of(context)
-                                  //               .secondaryText,
-                                  //         ),
-                                  textStyle:
-                                      FlutterFlowTheme.of(context).bodyText1,
-                                  hintText: 'Please select...',
-                                  // searchHintText: 'Search for an item...',
-                                  fillColor: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  elevation: 2,
-                                  borderColor: Colors.transparent,
-                                  borderWidth: 0,
-                                  borderRadius: 0,
-                                  margin: EdgeInsetsDirectional.fromSTEB(
-                                      12, 4, 12, 4),
-                                  hidesUnderline: true,
-                                  // isSearchable: false,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                     child: Row(
@@ -278,13 +210,12 @@ class _SendEmailWidgetState extends State<SendEmailWidget> {
                             child: FFButtonWidget(
                               onPressed: () async {
                                 try {
-                                  final result = await FirebaseFunctions.instance.httpsCallable('commandEmail').call(
+                                  await FirebaseFunctions.instance.httpsCallable('commandEmail').call(
                                     {
                                       "emails": widget.emails,
                                       "currentUser": currentUserEmail,
                                       "action": widget.actionName,
                                       "message": _model.emailMessageController.text,
-                                      // "push": true,
                                     },
                                   );
                                   //  _response = result.data as String;

@@ -1,8 +1,10 @@
 import '/auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/form_field_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -419,6 +421,168 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                         ),
                       ),
                       Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(15, 0, 15, 0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    'Add people to email list:',
+                                    style: FlutterFlowTheme.of(context)
+                                        .subtitle2
+                                        .override(
+                                          fontFamily: 'Urbanist',
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(15, 0, 15, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            // Generated code for this DropDown Widget...
+                            Expanded(
+                              child: StreamBuilder<List<UsersRecord>>(
+                                stream: queryUsersRecord(),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: CircularProgressIndicator(
+                                          color: FlutterFlowTheme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  List<UsersRecord> dropDownUsersRecordList = snapshot.data!;
+                                  return FlutterFlowDropDown<String>(
+                                    controller: _model.dropDownValueController ??=
+                                        FormFieldController<String>(null),
+                                    options: dropDownUsersRecordList
+                                        .map((e) => e.email)
+                                        .withoutNulls
+                                        .toList()
+                                        .toList(),
+                                    onChanged: (val) => setState(() => _model.dropDownValue = val),
+                                    width: 180,
+                                    height: 50,
+                                    // searchHintTextStyle: FlutterFlowTheme.of(context).bodyLarge.override(
+                                    //       fontFamily: '',
+                                    //       color: FlutterFlowTheme.of(context).secondaryText,
+                                    //     ),
+                                    textStyle: FlutterFlowTheme.of(context).subtitle2,
+                                    hintText: 'Please select...',
+                                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+                                    elevation: 2,
+                                    borderColor: Colors.transparent,
+                                    borderWidth: 0,
+                                    borderRadius: 0,
+                                    margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+                                    hidesUnderline: true,
+                                  );
+                                },
+                              ),
+                            ),
+                            FlutterFlowIconButton(
+                              borderColor: Colors.transparent,
+                              borderRadius: 30,
+                              borderWidth: 1,
+                              buttonSize: 60,
+                              icon: Icon(
+                                Icons.add,
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                size: 30,
+                              ),
+                              onPressed: () async {
+                                final actionsUpdateData = {
+                                  'emails': FieldValue.arrayUnion(
+                                      [_model.dropDownValue]),
+                                };
+                                await widget.actionRef!
+                                    .update(actionsUpdateData);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
+                        child: Builder(
+                          builder: (context) {
+                            final emailGroup =
+                                editActionsActionsRecord.emails!.toList();
+                            return Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children:
+                                List.generate(emailGroup.length, (emailGroupIndex) {
+                              final emailGroupItem = emailGroup[emailGroupIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    15, 0, 15, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onLongPress: () async {
+                                          final actionsUpdateData = {
+                                            'emails': FieldValue.arrayRemove(
+                                                [emailGroupItem]),
+                                          };
+                                          await widget.actionRef!
+                                              .update(actionsUpdateData);
+                                        },
+                                        child: Card(
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    15, 3, 0, 3),
+                                            child: Text(
+                                              emailGroupItem,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .subtitle2
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 20,
+                                                      ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          );
+                          },
+                        ),
+                      ),
+                      Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(15, 15, 15, 0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
@@ -451,12 +615,12 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                                   controller: _model.newVariableController,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    labelText: 'New Item',
+                                    labelText: 'Add Check',
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .subtitle2
                                         .override(
                                           fontFamily: 'Urbanist',
-                                          fontSize: 14,
+                                          fontSize: 16,
                                         ),
                                     hintText: 'Enter item here',
                                     hintStyle: FlutterFlowTheme.of(context)
@@ -885,19 +1049,19 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                                 size: 30,
                               ),
                               onPressed: () async {
-                                final actionsUpdateData =
-                                    createActionsRecordData(
-                                  commands: createCommandsStruct(
-                                    fieldValues: {
-                                      'addVar': FieldValue.arrayRemove(
-                                          [_model.removeVarController.text]),
+                                      final actionsUpdateData =
+                                          createActionsRecordData(
+                                        commands: createCommandsStruct(
+                                          fieldValues: {
+                                            'removeVar': FieldValue.arrayUnion(
+                                                [_model.removeVarController.text]),
+                                          },
+                                          clearUnsetFields: false,
+                                        ),
+                                      );
+                                      await widget.actionRef!
+                                          .update(actionsUpdateData);
                                     },
-                                    clearUnsetFields: false,
-                                  ),
-                                );
-                                await widget.actionRef!
-                                    .update(actionsUpdateData);
-                              },
                             ),
                           ],
                         ),
@@ -905,14 +1069,14 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                       Builder(
                         builder: (context) {
                           final removeVar = editActionsActionsRecord
-                                  .commands.addVar
+                                  .commands.removeVar
                                   ?.toList()
                                   ?.toList() ??
                               [];
                           return Column(
                             mainAxisSize: MainAxisSize.max,
-                            children: List.generate(removeVar.length,
-                                (removeVarIndex) {
+                            children:
+                                List.generate(removeVar.length, (removeVarIndex) {
                               final removeVarItem = removeVar[removeVarIndex];
                               return Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -921,26 +1085,45 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Expanded(
-                                      child: Card(
-                                        clipBehavior:
-                                            Clip.antiAliasWithSaveLayer,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  15, 3, 0, 3),
-                                          child: Text(
-                                            removeVarItem,
-                                            style: FlutterFlowTheme.of(context)
-                                                .subtitle2
-                                                .override(
-                                                  fontFamily: 'Urbanist',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  fontSize: 20,
-                                                ),
+                                      child: InkWell(
+                                        onLongPress: () async {
+                                          final actionsUpdateData =
+                                              createActionsRecordData(
+                                            commands: createCommandsStruct(
+                                              fieldValues: {
+                                                'removeVar':
+                                                    FieldValue.arrayRemove(
+                                                        [removeVarItem]),
+                                              },
+                                              clearUnsetFields: false,
+                                            ),
+                                          );
+                                          await widget.actionRef!
+                                              .update(actionsUpdateData);
+                                        },
+                                        child: Card(
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    15, 3, 0, 3),
+                                            child: Text(
+                                              removeVarItem,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .subtitle2
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 20,
+                                                      ),
+                                            ),
                                           ),
                                         ),
                                       ),
