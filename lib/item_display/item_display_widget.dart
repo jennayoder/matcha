@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 import 'item_display_model.dart';
 export 'item_display_model.dart';
@@ -22,6 +23,7 @@ class ItemDisplayWidget extends StatefulWidget {
     this.itemName,
     this.itemRef,
     this.actionName,
+    this.emails,
     this.groupsRef,
     this.logRef,
   }) : super(key: key);
@@ -30,6 +32,7 @@ class ItemDisplayWidget extends StatefulWidget {
   final String? itemName;
   final DocumentReference? itemRef;
   final ActionsRecord? actionName;
+  final List<String>? emails;
   final DocumentReference? groupsRef;
   final DocumentReference? logRef;
 
@@ -299,6 +302,8 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => SendEmailWidget(
+                                            actionName: listViewActionsRecord.actionName,
+                                            emails: listViewActionsRecord.emails!.toList(),
                                           ),
                                         ),
                                       );

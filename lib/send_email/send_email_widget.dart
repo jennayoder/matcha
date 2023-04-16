@@ -1,3 +1,6 @@
+import 'package:matcha/auth/auth_util.dart';
+import 'package:matcha/index.dart';
+
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -10,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 import 'send_email_model.dart';
 export 'send_email_model.dart';
@@ -18,15 +22,19 @@ class SendEmailWidget extends StatefulWidget {
   const SendEmailWidget({
     Key? key,
     this.actionName,
+    this.emails,
     this.logRef,
     this.groupRef,
     this.typeRef,
+    this.actionsDoc,
   }) : super(key: key);
 
-  final DocumentReference? actionName;
+  final String? actionName;
+  final List<String>? emails;
   final DocumentReference? logRef;
   final DocumentReference? groupRef;
   final DocumentReference? typeRef;
+  final ActionsRecord? actionsDoc;
 
   @override
   _SendEmailWidgetState createState() => _SendEmailWidgetState();
@@ -37,6 +45,8 @@ class _SendEmailWidgetState extends State<SendEmailWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+
+  final functions = FirebaseFunctions.instance;
 
   @override
   void initState() {
@@ -267,18 +277,29 @@ class _SendEmailWidgetState extends State<SendEmailWidget> {
                                 100.0, 0.0, 100.0, 0.0),
                             child: FFButtonWidget(
                               onPressed: () async {
-                                await launchUrl(Uri(
-                                    scheme: 'mailto',
-                                    path: _model.dropDownValue!,
-                                    query: {
-                                      'subject': 'Matcha',
-                                      'body':
-                                          _model.emailMessageController.text,
-                                    }
-                                        .entries
-                                        .map((MapEntry<String, String> e) =>
-                                            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-                                        .join('&')));
+                                try {
+                                  final result = await FirebaseFunctions.instance.httpsCallable('commandEmail').call(
+                                    {
+                                      "emails": widget.emails,
+                                      "currentUser": currentUserEmail,
+                                      "action": widget.actionName,
+                                      "message": _model.emailMessageController.text,
+                                      // "push": true,
+                                    },
+                                  );
+                                  //  _response = result.data as String;
+                                } on FirebaseFunctionsException catch (error) {
+                                  print(error.code);
+                                  print(error.details);
+                                  print(error.message);
+                                  }
+
+                                 await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ItemDisplayWidget(),
+                                  ),
+                                );
                               },
                               text: 'Send Email',
                               options: FFButtonOptions(

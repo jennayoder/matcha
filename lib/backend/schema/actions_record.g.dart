@@ -57,6 +57,14 @@ class _$ActionsRecordSerializer implements StructuredSerializer<ActionsRecord> {
                   DocumentReference, const [const FullType.nullable(Object)])
             ])));
     }
+    value = object.emails;
+    if (value != null) {
+      result
+        ..add('emails')
+        ..add(serializers.serialize(value,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(String)])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -102,6 +110,12 @@ class _$ActionsRecordSerializer implements StructuredSerializer<ActionsRecord> {
                   specifiedType: const FullType(CommandsStruct))!
               as CommandsStruct);
           break;
+        case 'emails':
+          result.emails.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(String)]))!
+              as BuiltList<Object?>);
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -125,6 +139,8 @@ class _$ActionsRecord extends ActionsRecord {
   @override
   final CommandsStruct commands;
   @override
+  final BuiltList<String>? emails;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$ActionsRecord([void Function(ActionsRecordBuilder)? updates]) =>
@@ -135,6 +151,7 @@ class _$ActionsRecord extends ActionsRecord {
       this.actionName,
       this.groups,
       required this.commands,
+      this.emails,
       this.ffRef})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
@@ -156,6 +173,7 @@ class _$ActionsRecord extends ActionsRecord {
         actionName == other.actionName &&
         groups == other.groups &&
         commands == other.commands &&
+        emails == other.emails &&
         ffRef == other.ffRef;
   }
 
@@ -166,6 +184,7 @@ class _$ActionsRecord extends ActionsRecord {
     _$hash = $jc(_$hash, actionName.hashCode);
     _$hash = $jc(_$hash, groups.hashCode);
     _$hash = $jc(_$hash, commands.hashCode);
+    _$hash = $jc(_$hash, emails.hashCode);
     _$hash = $jc(_$hash, ffRef.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -178,6 +197,7 @@ class _$ActionsRecord extends ActionsRecord {
           ..add('actionName', actionName)
           ..add('groups', groups)
           ..add('commands', commands)
+          ..add('emails', emails)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -190,7 +210,16 @@ class ActionsRecordBuilder
   ListBuilder<String>? _checks;
   ListBuilder<String> get checks =>
       _$this._checks ??= new ListBuilder<String>();
+
   set checks(ListBuilder<String>? checks) => _$this._checks = checks;
+
+
+  ListBuilder<String>? _emails;
+  ListBuilder<String> get emails =>
+      _$this._emails ??= new ListBuilder<String>();
+
+  set emails(ListBuilder<String>? emails) => _$this._emails = emails;
+
 
   String? _actionName;
   String? get actionName => _$this._actionName;
@@ -222,6 +251,8 @@ class ActionsRecordBuilder
       _actionName = $v.actionName;
       _groups = $v.groups?.toBuilder();
       _commands = $v.commands.toBuilder();
+      _emails = $v.emails?.toBuilder();
+
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -251,17 +282,20 @@ class ActionsRecordBuilder
               actionName: actionName,
               groups: _groups?.build(),
               commands: commands.build(),
+              emails: _emails?.build(),
+
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'checks';
         _checks?.build();
-
         _$failedField = 'groups';
         _groups?.build();
         _$failedField = 'commands';
         commands.build();
+        _$failedField = 'emails';
+        _emails?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'ActionsRecord', _$failedField, e.toString());

@@ -18,6 +18,9 @@ abstract class ActionsRecord
 
   CommandsStruct get commands;
 
+  BuiltList<String>? get emails;
+
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -28,7 +31,8 @@ abstract class ActionsRecord
     ..checks = ListBuilder()
     ..actionName = ''
     ..groups = ListBuilder()
-    ..commands = CommandsStructBuilder();
+    ..commands = CommandsStructBuilder()
+    ..emails = ListBuilder();
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
       parent != null
@@ -67,7 +71,8 @@ Map<String, dynamic> createActionsRecordData({
         ..checks = null
         ..actionName = actionName
         ..groups = null
-        ..commands = CommandsStructBuilder(),
+        ..commands = CommandsStructBuilder()
+        ..emails = null,
     ),
   );
 
