@@ -82,6 +82,7 @@ class _ActionsWidgetState extends State<ActionsWidget> {
           elevation: 2,
         ),
         body: SafeArea(
+          child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -150,7 +151,7 @@ class _ActionsWidgetState extends State<ActionsWidget> {
                   List<ActionsRecord> listViewActionsRecordList =
                       snapshot.data!;
                   return ListView.builder(
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 80),
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     itemCount: listViewActionsRecordList.length,
@@ -240,7 +241,7 @@ class _ActionsWidgetState extends State<ActionsWidget> {
                 },
               ),
             ],
-          ),
+          ), ),
         ),
       ),
     );
