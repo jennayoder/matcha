@@ -24,6 +24,8 @@ abstract class TypeRecord implements Built<TypeRecord, TypeRecordBuilder> {
 
   String? get typeName;
 
+  BuiltList<String>? get initVars;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -31,7 +33,8 @@ abstract class TypeRecord implements Built<TypeRecord, TypeRecordBuilder> {
   static void _initializeBuilder(TypeRecordBuilder builder) => builder
     ..usersAssigned = ListBuilder()
     ..description = ''
-    ..typeName = '';
+    ..typeName = ''
+    ..initVars = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('type');
@@ -69,7 +72,8 @@ Map<String, dynamic> createTypeRecordData({
         ..description = description
         ..lastEdited = lastEdited
         ..timeCreated = timeCreated
-        ..typeName = typeName,
+        ..typeName = typeName
+        ..initVars = null,
     ),
   );
 

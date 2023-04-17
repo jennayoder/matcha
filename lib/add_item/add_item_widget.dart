@@ -19,10 +19,12 @@ class AddItemWidget extends StatefulWidget {
     Key? key,
     this.scannedItem,
     this.loggedItem,
+    this.typeRef,
   }) : super(key: key);
 
   final String? scannedItem;
   final DocumentReference? loggedItem;
+  final DocumentReference? typeRef;
 
   @override
   _AddItemWidgetState createState() => _AddItemWidgetState();
@@ -135,7 +137,8 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                               controller: _model.dropDownController ??=
                                   FormFieldController<String>(null),
                               options: dropDownTypeRecordList
-                                  .map((e) => e.reference.id)
+                                  .map((e) => e.typeName)
+                                  .withoutNulls
                                   .toList()
                                   .toList(),
                               onChanged: (val) =>
@@ -249,56 +252,83 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    // Generated code for this Button Widget...
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            90.0, 0.0, 90.0, 0.0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            final scannedItemsCreateData = {
-                              ...createScannedItemsRecordData(
-                                name: _model.itemNameController.text,
-                                qrID: widget.scannedItem,
-                                type: _model.dropDownValue,
-                                owner: currentUserReference,
-                              ),
-                              'dateAdded': FieldValue.serverTimestamp(),
-                              'variables': ['init'],
-                            };
-                            await ScannedItemsRecord.collection
-                                .doc()
-                                .set(scannedItemsCreateData);
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    NavBarPage(initialPage: 'Scan'),
-                              ),
-                            );
-                          },
-                          text: 'Add Item',
-                          options: FFButtonOptions(
-                            width: 130.0,
-                            height: 40.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: FlutterFlowTheme.of(context).primaryColor,
-                            textStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
+                        padding: EdgeInsetsDirectional.fromSTEB(90, 0, 90, 0),
+                        child: StreamBuilder<List<TypeRecord>>(
+                          stream: queryTypeRecord(
+                            queryBuilder: (typeRecord) =>
+                                typeRecord.where('typeName', isEqualTo: _model.dropDownValue),
+                            singleRecord: true,
+                          ),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircularProgressIndicator(
+                                    color: FlutterFlowTheme.of(context).primaryColor,
+                                  ),
+                                ),
+                              );
+                            }
+                            List<TypeRecord> buttonTypeRecordList = snapshot.data!;
+                            // Return an empty Container when the item does not exist.
+                            if (snapshot.data!.isEmpty) {
+                              return Container();
+                            }
+                            final buttonTypeRecord = buttonTypeRecordList.isNotEmpty
+                                ? buttonTypeRecordList.first
+                                : null;
+                            return FFButtonWidget(
+                              onPressed: () async {
+                                final scannedItemsCreateData = {
+                                  ...createScannedItemsRecordData(
+                                    name: _model.itemNameController.text,
+                                    qrID: widget.scannedItem,
+                                    type: buttonTypeRecord!.reference.id,
+                                    owner: currentUserReference,
+                                  ),
+                                  'dateAdded': FieldValue.serverTimestamp(),
+                                  'variables': [buttonTypeRecord!.initVars!.toList().first],
+                                };
+                                await ScannedItemsRecord.collection
+                                    .doc()
+                                    .set(scannedItemsCreateData);
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => NavBarPage(initialPage: 'Scan'),
+                                  ),
+                                );
+                              },
+                              text: 'Add Item',
+                              options: FFButtonOptions(
+                                width: 130,
+                                height: 40,
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                color: Color(0xE273926C),
+                                textStyle: FlutterFlowTheme.of(context).title1.override(
                                       fontFamily: 'Urbanist',
                                       color: Colors.white,
                                     ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
+                                elevation: 2,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
+
                   ],
                 ),
               ),

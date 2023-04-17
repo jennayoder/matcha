@@ -44,6 +44,9 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => EditTypeModel());
+
+    _model.initVarsController ??= TextEditingController();
+
   }
 
   @override
@@ -113,266 +116,463 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                child: Row(
+              SingleChildScrollView(
+                child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
-                        child: Text(
-                          'Create groups of users you want to have access to this type. ',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyText1
-                              .override(
-                                fontFamily: 'Urbanist',
-                                color: FlutterFlowTheme.of(context).darkText,
-                                fontSize: 15,
-                              ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              StreamBuilder<List<GroupsRecord>>(
-                stream: queryGroupsRecord(
-                  parent: widget.typeRef,
-                ),
-                builder: (context, snapshot) {
-                  // Customize what your widget looks like when it's loading.
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: CircularProgressIndicator(
-                          color: FlutterFlowTheme.of(context).primaryColor,
-                        ),
-                      ),
-                    );
-                  }
-                  List<GroupsRecord> listViewGroupsRecordList = snapshot.data!;
-                  return ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: listViewGroupsRecordList.length,
-                    itemBuilder: (context, listViewIndex) {
-                      final listViewGroupsRecord =
-                          listViewGroupsRecordList[listViewIndex];
-                      return Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 5, 16, 5),
-                        child: InkWell(
-                          onTap: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UsersWidget(
-                                  groupRef: listViewGroupsRecord.reference,
-                                  groupName: listViewGroupsRecord.groupName,
-                                  typeRef: widget.typeRef,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: 55,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 3,
-                                  color: Color(0x411D2429),
-                                  offset: Offset(0, 1),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
                             child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          8, 0, 4, 0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            listViewGroupsRecord.groupName!,
-                                            style: FlutterFlowTheme.of(context)
-                                                .title3,
-                                          ),
-                                        ],
+                              padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                              child: Text(
+                                'Create groups of users you want to have access to this type. ',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color: FlutterFlowTheme.of(context).darkText,
+                                      fontSize: 15,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    StreamBuilder<List<GroupsRecord>>(
+                      stream: queryGroupsRecord(
+                        parent: widget.typeRef,
+                      ),
+                      builder: (context, snapshot) {
+                        // Customize what your widget looks like when it's loading.
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: CircularProgressIndicator(
+                                color: FlutterFlowTheme.of(context).primaryColor,
+                              ),
+                            ),
+                          );
+                        }
+                        List<GroupsRecord> listViewGroupsRecordList = snapshot.data!;
+                        return ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: listViewGroupsRecordList.length,
+                          itemBuilder: (context, listViewIndex) {
+                            final listViewGroupsRecord =
+                                listViewGroupsRecordList[listViewIndex];
+                            return Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(16, 5, 16, 5),
+                              child: InkWell(
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => UsersWidget(
+                                        groupRef: listViewGroupsRecord.reference,
+                                        groupName: listViewGroupsRecord.groupName,
+                                        typeRef: widget.typeRef,
                                       ),
                                     ),
-                                  ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 7, 0, 0),
-                                        child: Icon(
-                                          Icons.chevron_right_rounded,
-                                          color: Color(0xFF57636C),
-                                          size: 24,
-                                        ),
-                                      ),
+                                  );
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 55,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 3,
+                                        color: Color(0x411D2429),
+                                        offset: Offset(0, 1),
+                                      )
                                     ],
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(100, 0, 100, 0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            final groupsCreateData = createGroupsRecordData(
-                              groupName: 'New Group',
-                            );
-                            await GroupsRecord.createDoc(widget.typeRef!)
-                                .set(groupsCreateData);
-                          },
-                          text: 'Add Group',
-                          options: FFButtonOptions(
-                            width: 130,
-                            height: 40,
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            iconPadding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            color: FlutterFlowTheme.of(context).primaryColor,
-                            textStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
-                                      fontFamily: 'Urbanist',
-                                      color: Colors.white,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsetsDirectional.fromSTEB(
+                                                8, 0, 4, 0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  listViewGroupsRecord.groupName!,
+                                                  style: FlutterFlowTheme.of(context)
+                                                      .title3,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(
+                                                  0, 7, 0, 0),
+                                              child: Icon(
+                                                Icons.chevron_right_rounded,
+                                                color: Color(0xFF57636C),
+                                                size: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(100, 0, 100, 0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ActionsWidget(
-                                  typeRef: widget.typeRef,
+                                  ),
                                 ),
                               ),
                             );
                           },
-                          text: 'Actions',
-                          options: FFButtonOptions(
-                            width: 130,
-                            height: 40,
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            color: FlutterFlowTheme.of(context).primaryColor,
-                            textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                                  fontFamily: 'Urbanist',
-                                  color: Colors.white,
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(100, 0, 100, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  final groupsCreateData = createGroupsRecordData(
+                                    groupName: 'New Group',
+                                  );
+                                  await GroupsRecord.createDoc(widget.typeRef!)
+                                      .set(groupsCreateData);
+                                },
+                                text: 'Add Group',
+                                options: FFButtonOptions(
+                                  width: 130,
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  iconPadding:
+                                      EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primaryColor,
+                                  textStyle:
+                                      FlutterFlowTheme.of(context).subtitle2.override(
+                                            fontFamily: 'Urbanist',
+                                            color: Colors.white,
+                                          ),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                            elevation: 2,
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(80, 0, 80, 0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    NavBarPage(initialPage: 'typesPage'),
                               ),
-                            );
-                          },
-                          text: 'Done',
-                          options: FFButtonOptions(
-                            width: 130,
-                            height: 40,
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            iconPadding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            color: FlutterFlowTheme.of(context).primaryColor,
-                            textStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
-                                      fontFamily: 'Urbanist',
-                                      color: Colors.white,
-                                    ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
                             ),
-                            borderRadius: BorderRadius.circular(8),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ],
+                    Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(20, 40, 15, 15),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  'Enter the variables each item is initalized with:',
+                                  style: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Urbanist',
+                                        color:
+                                            FlutterFlowTheme.of(context).primaryText,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                    child: TextFormField(
+                                      controller: _model.initVarsController,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Add init variables',
+                                        labelStyle: FlutterFlowTheme.of(context)
+                                            .subtitle2
+                                            .override(
+                                              fontFamily: 'Urbanist',
+                                              fontSize: 14,
+                                            ),
+                                        hintText: 'Enter item here',
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .subtitle2
+                                            .override(
+                                              fontFamily: 'Urbanist',
+                                              fontSize: 12,
+                                            ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                                FlutterFlowTheme.of(context).lineGray,
+                                            width: 2,
+                                          ),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 2,
+                                          ),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 2,
+                                          ),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 2,
+                                          ),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        filled: true,
+                                        fillColor: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        contentPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                16, 18, 0, 18),
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .title1
+                                          .override(
+                                            fontFamily: 'Urbanist',
+                                            fontSize: 14,
+                                          ),
+                                      validator: _model.initVarsControllerValidator
+                                          .asValidator(context),
+                                    ),
+                                  ),
+                                ),
+                                FlutterFlowIconButton(
+                                  borderColor: Colors.transparent,
+                                  borderRadius: 30,
+                                  borderWidth: 1,
+                                  buttonSize: 60,
+                                  icon: Icon(
+                                    Icons.add,
+                                    color: FlutterFlowTheme.of(context).primaryText,
+                                    size: 30,
+                                  ),
+                                  onPressed: () async {
+                                    final typeUpdateData = {
+                                      'initVars': FieldValue.arrayUnion([_model.initVarsController.text]),
+                                    };
+                                    await widget.typeRef!.update(typeUpdateData);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
+                            child: StreamBuilder<TypeRecord>(
+                              stream: TypeRecord.getDocument(widget.typeRef!),
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: CircularProgressIndicator(
+                                        color: FlutterFlowTheme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                final columnTypeRecord = snapshot.data!;
+                                return Builder(
+                                  builder: (context) {
+                                    final initVars =
+                                        columnTypeRecord.initVars!.toList();
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: List.generate(initVars.length,
+                                          (initVarsIndex) {
+                                        final initVarsItem = initVars[initVarsIndex];
+                                        return Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                              15, 0, 15, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Expanded(
+                                                child: InkWell(
+                                                  onLongPress: () async {
+                                                    final typeUpdateData = {
+                                                      'initVars':
+                                                          FieldValue.arrayRemove(
+                                                              [initVarsItem]),
+                                                    };
+                                                    await widget.typeRef!
+                                                        .update(typeUpdateData);
+                                                  },
+                                                  child: Card(
+                                                    clipBehavior:
+                                                        Clip.antiAliasWithSaveLayer,
+                                                    color:
+                                                        FlutterFlowTheme.of(context)
+                                                            .secondaryBackground,
+                                                    child: Padding(
+                                                      padding: EdgeInsetsDirectional
+                                                          .fromSTEB(10, 5, 10, 5),
+                                                      child: Text(
+                                                        initVarsItem,
+                                                        style: FlutterFlowTheme.of(
+                                                                context)
+                                                            .subtitle2
+                                                            .override(
+                                                              fontFamily: 'Urbanist',
+                                                              color:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                              fontSize: 18,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(100, 0, 100, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ActionsWidget(
+                                        typeRef: widget.typeRef,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                text: 'Actions',
+                                options: FFButtonOptions(
+                                  width: 130,
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primaryColor,
+                                  textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                                        fontFamily: 'Urbanist',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 2,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 40),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(80, 0, 80, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          NavBarPage(initialPage: 'typesPage'),
+                                    ),
+                                  );
+                                },
+                                text: 'Done',
+                                options: FFButtonOptions(
+                                  width: 130,
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  iconPadding:
+                                      EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primaryColor,
+                                  textStyle:
+                                      FlutterFlowTheme.of(context).subtitle2.override(
+                                            fontFamily: 'Urbanist',
+                                            color: Colors.white,
+                                          ),
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],),),],
           ),
         ),
       ),

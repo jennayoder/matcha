@@ -65,6 +65,14 @@ class _$TypeRecordSerializer implements StructuredSerializer<TypeRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.initVars;
+    if (value != null) {
+      result
+        ..add('initVars')
+        ..add(serializers.serialize(value,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(String)])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -116,6 +124,12 @@ class _$TypeRecordSerializer implements StructuredSerializer<TypeRecord> {
           result.typeName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'initVars':
+          result.initVars.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(String)]))!
+              as BuiltList<Object?>);
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -143,6 +157,8 @@ class _$TypeRecord extends TypeRecord {
   @override
   final String? typeName;
   @override
+  final BuiltList<String>? initVars;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$TypeRecord([void Function(TypeRecordBuilder)? updates]) =>
@@ -155,6 +171,7 @@ class _$TypeRecord extends TypeRecord {
       this.lastEdited,
       this.timeCreated,
       this.typeName,
+      this.initVars,
       this.ffRef})
       : super._();
 
@@ -175,21 +192,23 @@ class _$TypeRecord extends TypeRecord {
         lastEdited == other.lastEdited &&
         timeCreated == other.timeCreated &&
         typeName == other.typeName &&
+        initVars == other.initVars &&
         ffRef == other.ffRef;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc($jc($jc(0, owner.hashCode), usersAssigned.hashCode),
-                        description.hashCode),
-                    lastEdited.hashCode),
-                timeCreated.hashCode),
-            typeName.hashCode),
-        ffRef.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, owner.hashCode);
+    _$hash = $jc(_$hash, usersAssigned.hashCode);
+    _$hash = $jc(_$hash, description.hashCode);
+    _$hash = $jc(_$hash, lastEdited.hashCode);
+    _$hash = $jc(_$hash, timeCreated.hashCode);
+    _$hash = $jc(_$hash, typeName.hashCode);
+    _$hash = $jc(_$hash, initVars.hashCode);
+    _$hash = $jc(_$hash, ffRef.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
@@ -201,6 +220,7 @@ class _$TypeRecord extends TypeRecord {
           ..add('lastEdited', lastEdited)
           ..add('timeCreated', timeCreated)
           ..add('typeName', typeName)
+          ..add('initVars', initVars)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -235,6 +255,11 @@ class TypeRecordBuilder implements Builder<TypeRecord, TypeRecordBuilder> {
   String? get typeName => _$this._typeName;
   set typeName(String? typeName) => _$this._typeName = typeName;
 
+  ListBuilder<String>? _initVars;
+  ListBuilder<String> get initVars =>
+      _$this._initVars ??= new ListBuilder<String>();
+  set initVars(ListBuilder<String>? initVars) => _$this._initVars = initVars;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -252,6 +277,7 @@ class TypeRecordBuilder implements Builder<TypeRecord, TypeRecordBuilder> {
       _lastEdited = $v.lastEdited;
       _timeCreated = $v.timeCreated;
       _typeName = $v.typeName;
+      _initVars = $v.initVars?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -283,12 +309,16 @@ class TypeRecordBuilder implements Builder<TypeRecord, TypeRecordBuilder> {
               lastEdited: lastEdited,
               timeCreated: timeCreated,
               typeName: typeName,
+              initVars: _initVars?.build(),
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'usersAssigned';
         _usersAssigned?.build();
+
+        _$failedField = 'initVars';
+        _initVars?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'TypeRecord', _$failedField, e.toString());
@@ -300,4 +330,4 @@ class TypeRecordBuilder implements Builder<TypeRecord, TypeRecordBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint
