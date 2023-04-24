@@ -137,7 +137,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                               controller: _model.dropDownController ??=
                                   FormFieldController<String>(null),
                               options: dropDownTypeRecordList
-                                  .map((e) => e.typeName)
+                                  .map((e) => e.reference.id)
                                   .withoutNulls
                                   .toList()
                                   .toList(),
@@ -283,17 +283,25 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                             final buttonTypeRecord = buttonTypeRecordList.isNotEmpty
                                 ? buttonTypeRecordList.first
                                 : null;
+                            
+                            final varLen = buttonTypeRecord!.initVars!.length;
+                            List<String> tempVariables = [];
+                            for (int i = 0; i < varLen; i++) {
+                              tempVariables.add(buttonTypeRecord!.initVars!.toList()[i]);
+                            }
+                            print(varLen);
+                            print(tempVariables);
                             return FFButtonWidget(
                               onPressed: () async {
                                 final scannedItemsCreateData = {
                                   ...createScannedItemsRecordData(
                                     name: _model.itemNameController.text,
                                     qrID: widget.scannedItem,
-                                    type: buttonTypeRecord!.reference.id,
+                                    type: _model.dropDownValue,
                                     owner: currentUserReference,
                                   ),
                                   'dateAdded': FieldValue.serverTimestamp(),
-                                  'variables': [buttonTypeRecord!.initVars!.toList().first],
+                                  'variables': tempVariables,
                                 };
                                 await ScannedItemsRecord.collection
                                     .doc()

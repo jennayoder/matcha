@@ -91,7 +91,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
             itemDisplayScannedItemsRecordList.isNotEmpty
                 ? itemDisplayScannedItemsRecordList.first
                 : null;
-        final veriablesLength = itemDisplayScannedItemsRecord!.variables!.length;
+        // final veriablesLength = itemDisplayScannedItemsRecord!.variables!.length;
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: Color(0xFFEAEAEA),

@@ -234,7 +234,7 @@ class _HomePageMAINWidgetState extends State<HomePageMAINWidget> {
                               owner: currentUserReference,
                               typeName: _model.typeNameController.text,
                           );
-                          var typeRecordReference = TypeRecord.collection.doc();
+                          var typeRecordReference = TypeRecord.collection.doc(_model.typeNameController.text);
                           await typeRecordReference.set(typeCreateData);
                           _model.createTypeOutput =
                               TypeRecord.getDocumentFromData(
