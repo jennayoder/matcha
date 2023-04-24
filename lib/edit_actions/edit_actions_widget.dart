@@ -966,12 +966,11 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                               child: Text(
                                 'Variables to remove when action is selected:',
                                 style: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Urbanist',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                    ),
+                                          .title1
+                                          .override(
+                                            fontFamily: 'Urbanist',
+                                            fontSize: 14,
+                                          ),
                               ),
                             ),
                           ],

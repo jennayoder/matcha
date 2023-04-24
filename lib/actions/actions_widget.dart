@@ -172,6 +172,9 @@ class _ActionsWidgetState extends State<ActionsWidget> {
                               ),
                             );
                           },
+                          onLongPress: () async {
+                                  await listViewActionsRecord.reference.delete();
+                                },
                           child: Container(
                             width: double.infinity,
                             height: 55,

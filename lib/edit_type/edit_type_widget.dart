@@ -184,6 +184,9 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
                                     ),
                                   );
                                 },
+                                onLongPress: () async {
+                                  await listViewGroupsRecord.reference.delete();
+                                },
                                 child: Container(
                                   width: double.infinity,
                                   height: 55,
