@@ -157,6 +157,8 @@ class _ItemsPageWidgetState extends State<ItemsPageWidget> {
                                     builder: (context) => ItemDisplayWidget(
                                       itemName: listViewScannedItemsRecord.name,
                                       itemRef: typeItemScannedItemsRecord!.reference,
+                                      types: widget.types,
+                                      groupsRef: widget.groupsRef,
                                     ),
                                   ),
                                 );
