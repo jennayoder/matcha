@@ -113,6 +113,7 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
         elevation: 2,
       ),
       body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -160,15 +161,14 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
                             ),
                           );
                         }
-                        List<GroupsRecord> listViewGroupsRecordList = snapshot.data!;
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: listViewGroupsRecordList.length,
-                          itemBuilder: (context, listViewIndex) {
+                        List<GroupsRecord> columnGroupsRecordList = snapshot.data!;
+                        return Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: List.generate(
+                                columnGroupsRecordList.length, (columnIndex) {
+
                             final listViewGroupsRecord =
-                                listViewGroupsRecordList[listViewIndex];
+                                columnGroupsRecordList[columnIndex];
                             return Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(16, 5, 16, 5),
                               child: InkWell(
@@ -248,7 +248,7 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
                                 ),
                               ),
                             );
-                          },
+                          }),
                         );
                       },
                     ),
@@ -575,7 +575,7 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
                 ],),),],
           ),
         ),
-      ),
+       ), ),
     );
   }
 }

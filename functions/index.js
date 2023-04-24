@@ -33,3 +33,40 @@ exports.commandEmail = functions.https.onCall(async (data, context) => {
         console.error(error)
     })
 });
+
+
+const serviceAccount = '../../firebase-service-account-key.json';
+const firebaseUrl = 'https://my-app.firebaseio.com';
+
+// Call this function like this:
+// copyCollection('customers', 'customers_backup').then(() => console.log('copy complete')).catch(error => console.log('copy failed. ' + error));
+
+firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert(require(serviceAccount)),
+    databaseURL: firebaseUrl
+});
+const firestore = firebaseAdmin.firestore();
+
+async function copyCollection(srcCollectionName, destCollectionName) {
+    const documents = await firestore.collection(srcCollectionName).get();
+    let writeBatch = admin.firestore().batch();
+    const destCollection = firestore.collection(destCollectionName);
+    let i = 0;
+    for (const doc of documents.docs) {
+        writeBatch.set(destCollection.doc(doc.id), doc.data());
+        i++;
+        if (i > 400) {  // write batch only allows maximum 500 writes per batch
+            i = 0;
+            console.log('Intermediate committing of batch operation');
+            await writeBatch.commit();
+            writeBatch = admin.firestore().batch();
+        }
+    }
+    if (i > 0) {
+        console.log('Firebase batch operation completed. Doing final committing of batch operation.');
+        await writeBatch.commit();
+    } else {
+        console.log('Firebase batch operation completed.');
+    }
+}
+
