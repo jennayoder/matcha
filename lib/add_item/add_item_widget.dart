@@ -289,8 +289,12 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                             for (int i = 0; i < varLen; i++) {
                               tempVariables.add(buttonTypeRecord!.initVars!.toList()[i]);
                             }
-                            print(varLen);
-                            print(tempVariables);
+                            // String typePrefix = '/type/';
+                            var returnReference = FirebaseFirestore.instance
+                              .collection('type')
+                              .doc(_model.dropDownValue);
+                            String? typeID = _model.dropDownValue;
+                            // final typeReference = '$typePrefix$typeID';
                             return FFButtonWidget(
                               onPressed: () async {
                                 final scannedItemsCreateData = {
@@ -299,6 +303,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                     qrID: widget.scannedItem,
                                     type: _model.dropDownValue,
                                     owner: currentUserReference,
+                                    typeRef: returnReference,
                                   ),
                                   'dateAdded': FieldValue.serverTimestamp(),
                                   'variables': tempVariables,

@@ -316,7 +316,6 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                         'variables': FieldValue.arrayUnion(
                                             [listViewActionsRecord.commands.addVar?.toList()?[i]]),
                                         };
-                                        // print(listViewActionsRecord.commands.addVar?.toList()?.first);
                                         await widget.itemRef?.update(scannedItemsUpdateData1);
                                       }
                                     }

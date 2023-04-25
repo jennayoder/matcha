@@ -93,7 +93,7 @@ class _ItemsPageWidgetState extends State<ItemsPageWidget> {
               StreamBuilder<List<ScannedItemsRecord>>(
                 stream: queryScannedItemsRecord(
                   queryBuilder: (scannedItemsRecord) => scannedItemsRecord
-                      .where('type', isEqualTo: widget.types?.id),
+                      .where('typeRef', isEqualTo: widget.types),
                 ),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
