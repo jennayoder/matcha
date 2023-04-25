@@ -113,14 +113,14 @@ class _ActionsWidgetState extends State<ActionsWidget> {
                                   customLog: false,
                                   sendEmail: false,
                                   fieldValues: {
-                                    'addVar': [' '],
-                                    'removeVar': [' '],
+                                    // 'addVar': [' '],
+                                    // 'removeVar': [' '],
                                   },
                                   clearUnsetFields: false,
                                   create: true,
                                 ),
                               ),
-                              'checks': ['init'],
+                              // 'checks': ['init'],
                             };
                             await ActionsRecord.createDoc(widget.typeRef!)
                                 .set(actionsCreateData);
@@ -210,7 +210,7 @@ class _ActionsWidgetState extends State<ActionsWidget> {
                                           Text(
                                             listViewActionsRecord.actionName!,
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
+                                                .subtitle2,
                                           ),
                                         ],
                                       ),
@@ -227,7 +227,7 @@ class _ActionsWidgetState extends State<ActionsWidget> {
                                             0, 7, 0, 0),
                                         child: Icon(
                                           Icons.chevron_right_rounded,
-                                          color: Color(0xFF57636C),
+                                          color: FlutterFlowTheme.of(context).primaryText,
                                           size: 24,
                                         ),
                                       ),

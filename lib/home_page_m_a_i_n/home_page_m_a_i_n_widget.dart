@@ -221,13 +221,13 @@ class _HomePageMAINWidgetState extends State<HomePageMAINWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 100.0, 0.0, 0.0),
+                padding: EdgeInsetsDirectional.fromSTEB(40, 100, 20, 0.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
                       padding:
-                          EdgeInsetsDirectional.fromSTEB(90.0, 0.0, 0.0, 0.0),
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                       child: FFButtonWidget(
                         onPressed: () async {
                           final typeCreateData = createTypeRecordData(
@@ -253,10 +253,10 @@ class _HomePageMAINWidgetState extends State<HomePageMAINWidget> {
                         },
                         text: 'Create Type',
                         options: FFButtonOptions(
-                          width: 200.0,
+                          width: 450.0,
                           height: 40.0,
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
+                              0, 0.0, 0, 0.0),
                           iconPadding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 0.0, 0.0),
                           color: FlutterFlowTheme.of(context).primaryColor,

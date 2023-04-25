@@ -130,7 +130,7 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
                             child: Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
                               child: Text(
-                                'Create groups of users you want to have access to this type. ',
+                                'Create groups of users you want to have access to this type. Hold down on a group to delete it.',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyText1
                                     .override(
@@ -304,11 +304,10 @@ class _EditTypeWidgetState extends State<EditTypeWidget> {
                                 Text(
                                   'Enter the variables each item is initalized with:',
                                   style: FlutterFlowTheme.of(context)
-                                      .subtitle2
+                                      .bodyText1
                                       .override(
                                         fontFamily: 'Urbanist',
-                                        color:
-                                            FlutterFlowTheme.of(context).primaryText,
+                                        color: FlutterFlowTheme.of(context).darkText,
                                       ),
                                 ),
                               ],
