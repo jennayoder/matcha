@@ -1,3 +1,5 @@
+import 'package:matcha/items_page/items_page_widget.dart';
+
 import '/auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -111,7 +113,14 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                 size: 30.0,
               ),
               onPressed: () async {
-                Navigator.pop(context);
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemsPageWidget(
+                      types: widget.types,
+                    ),
+                  ),
+                );
               },
             ),
             title: Text(
@@ -299,31 +308,23 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                         ),
                                       );
                                     }
-                                    if (listViewActionsRecord.commands.sendEmail!) {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => SendEmailWidget(
-                                            actionName: listViewActionsRecord.actionName,
-                                            emails: listViewActionsRecord.emails!.toList(),
-                                          ),
-                                        ),
-                                      );
-                                    }
 
                                     final addVarLength = listViewActionsRecord.commands.addVar?.length ?? 0;
                                     if ( addVarLength > 0) {
+                                      print("added variables");
                                       for (var i = 0; i < addVarLength; i++) {
                                         final scannedItemsUpdateData1 = {
                                         'variables': FieldValue.arrayUnion(
                                             [listViewActionsRecord.commands.addVar?.toList()?[i]]),
                                         };
                                         await widget.itemRef?.update(scannedItemsUpdateData1);
+                                        print(widget.itemRef);
                                       }
                                     }
 
                                     final removeVarLength = listViewActionsRecord.commands.removeVar?.length ?? 0;
                                     if ( removeVarLength > 0) {
+                                      print("removed variables");
                                       for (var i = 0; i < removeVarLength; i++) {
                                         final scannedItemsUpdateData1 = {
                                         'variables': FieldValue.arrayRemove(
@@ -332,6 +333,20 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                         // print(listViewActionsRecord.commands.addVar?.toList()?.first);
                                         await widget.itemRef?.update(scannedItemsUpdateData1);
                                       }
+                                    }
+
+                                    // Send email
+                                    if (listViewActionsRecord.commands.sendEmail!) {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SendEmailWidget(
+                                            actionName: listViewActionsRecord.actionName,
+                                            emails: listViewActionsRecord.emails!.toList(),
+                                            itemRef: widget.itemRef,
+                                          ),
+                                        ),
+                                      );
                                     }
                                     setState(() {});
                                   },

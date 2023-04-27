@@ -27,6 +27,7 @@ class SendEmailWidget extends StatefulWidget {
     this.groupRef,
     this.typeRef,
     this.actionsDoc,
+    this.itemRef,
   }) : super(key: key);
 
   final String? actionName;
@@ -35,6 +36,7 @@ class SendEmailWidget extends StatefulWidget {
   final DocumentReference? groupRef;
   final DocumentReference? typeRef;
   final ActionsRecord? actionsDoc;
+  final DocumentReference? itemRef;
 
   @override
   _SendEmailWidgetState createState() => _SendEmailWidgetState();
@@ -228,7 +230,9 @@ class _SendEmailWidgetState extends State<SendEmailWidget> {
                                  await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ItemDisplayWidget(),
+                                    builder: (context) => ItemDisplayWidget(
+                                      itemRef: widget.itemRef,
+                                    ),
                                   ),
                                 );
                               },

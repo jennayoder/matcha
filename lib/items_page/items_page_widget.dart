@@ -1,3 +1,5 @@
+import 'package:matcha/types_page/types_page_widget.dart';
+
 import '/backend/backend.dart';
 import '/auth/auth_util.dart';
 import '/edit_type/edit_type_widget.dart';
@@ -70,7 +72,14 @@ class _ItemsPageWidgetState extends State<ItemsPageWidget> {
             size: 30.0,
           ),
           onPressed: () async {
-            Navigator.pop(context);
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TypesPageWidget(
+                  // types: widget.types,
+                ),
+              ),
+            );
           },
         ),
         title: Text(
