@@ -66,6 +66,8 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
 
     return StreamBuilder<List<ScannedItemsRecord>>(
       stream: queryScannedItemsRecord(
+        queryBuilder: (scannedItemsRecord) =>
+        scannedItemsRecord.where('name', isEqualTo: widget.itemName),
         singleRecord: true,
       ),
       builder: (context, snapshot) {
