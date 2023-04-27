@@ -227,14 +227,7 @@ class _SendEmailWidgetState extends State<SendEmailWidget> {
                                   print(error.message);
                                   }
 
-                                 await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ItemDisplayWidget(
-                                      itemRef: widget.itemRef,
-                                    ),
-                                  ),
-                                );
+                                Navigator.pop(context);
                               },
                               text: 'Send Email',
                               options: FFButtonOptions(

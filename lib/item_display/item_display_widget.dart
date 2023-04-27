@@ -118,6 +118,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                   MaterialPageRoute(
                     builder: (context) => ItemsPageWidget(
                       types: widget.types,
+                      // itemName: widget.itemName,
                     ),
                   ),
                 );
