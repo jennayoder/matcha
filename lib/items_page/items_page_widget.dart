@@ -1,4 +1,5 @@
 import '/backend/backend.dart';
+import '/auth/auth_util.dart';
 import '/edit_type/edit_type_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -238,47 +239,65 @@ class _ItemsPageWidgetState extends State<ItemsPageWidget> {
                   );
                 },
               ),
+              // Generated code for this Row/Button...
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 300.0, 0.0, 0.0),
+                padding: EdgeInsetsDirectional.fromSTEB(0, 300, 0, 0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            100.0, 0.0, 100.0, 0.0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditTypeWidget(
-                                  typeName: widget.types?.id,
-                                  typeRef: widget.types,
+                        padding: EdgeInsetsDirectional.fromSTEB(100, 0, 100, 0),
+                        child: StreamBuilder<TypeRecord>(
+                          stream: TypeRecord.getDocument(widget.types!),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircularProgressIndicator(
+                                    color: FlutterFlowTheme.of(context).primaryColor,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          text: 'Edit Type',
-                          options: FFButtonOptions(
-                            width: 130.0,
-                            height: 40.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: FlutterFlowTheme.of(context).primaryColor,
-                            textStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
+                              );
+                            }
+                            final buttonTypeRecord = snapshot.data!;
+                            return FFButtonWidget(
+                              onPressed: () async {
+                                if (currentUserReference == buttonTypeRecord.owner) {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditTypeWidget(
+                                        typeName: widget.types?.id,
+                                        typeRef: widget.types,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              text: 'Edit Type',
+                              options: FFButtonOptions(
+                                width: 130,
+                                height: 40,
+                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                color: FlutterFlowTheme.of(context).primaryColor,
+                                textStyle: FlutterFlowTheme.of(context).title1.override(
                                       fontFamily: 'Urbanist',
                                       color: Colors.white,
                                     ),
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
+                                elevation: 2,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
