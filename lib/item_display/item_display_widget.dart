@@ -119,6 +119,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                     builder: (context) => ItemsPageWidget(
                       types: widget.types,
                       // itemName: widget.itemName,
+                      itemData: itemDisplayScannedItemsRecord,
                     ),
                   ),
                 );
@@ -311,6 +312,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                     }
 
                                     final addVarLength = listViewActionsRecord.commands.addVar?.length ?? 0;
+                                    print(itemDisplayScannedItemsRecord.reference);
                                     if ( addVarLength > 0) {
                                       print("added variables");
                                       for (var i = 0; i < addVarLength; i++) {
@@ -318,8 +320,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                         'variables': FieldValue.arrayUnion(
                                             [listViewActionsRecord.commands.addVar?.toList()?[i]]),
                                         };
-                                        await widget.itemRef?.update(scannedItemsUpdateData1);
-                                        print(widget.itemRef);
+                                        await itemDisplayScannedItemsRecord.reference.update(scannedItemsUpdateData1);
                                       }
                                     }
 
@@ -332,7 +333,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                             [listViewActionsRecord.commands.removeVar?.toList()?[i]]),
                                         };
                                         // print(listViewActionsRecord.commands.addVar?.toList()?.first);
-                                        await widget.itemRef?.update(scannedItemsUpdateData1);
+                                        await itemDisplayScannedItemsRecord.reference.update(scannedItemsUpdateData1);
                                       }
                                     }
 
@@ -344,7 +345,7 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
                                           builder: (context) => SendEmailWidget(
                                             actionName: listViewActionsRecord.actionName,
                                             emails: listViewActionsRecord.emails!.toList(),
-                                            itemRef: widget.itemRef,
+                                            itemRef: itemDisplayScannedItemsRecord.reference,
                                           ),
                                         ),
                                       );
