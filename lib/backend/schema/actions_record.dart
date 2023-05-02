@@ -13,6 +13,8 @@ abstract class ActionsRecord
   BuiltList<String>? get checks;
 
   String? get actionName;
+  
+  String? get message;
 
   BuiltList<DocumentReference>? get groups;
 
@@ -30,6 +32,7 @@ abstract class ActionsRecord
   static void _initializeBuilder(ActionsRecordBuilder builder) => builder
     ..checks = ListBuilder()
     ..actionName = ''
+    ..message = ''
     ..groups = ListBuilder()
     ..commands = CommandsStructBuilder()
     ..emails = ListBuilder();
@@ -62,6 +65,7 @@ abstract class ActionsRecord
 
 Map<String, dynamic> createActionsRecordData({
   String? actionName,
+  String? message,
   CommandsStruct? commands,
 }) {
   final firestoreData = serializers.toFirestore(
@@ -70,6 +74,7 @@ Map<String, dynamic> createActionsRecordData({
       (a) => a
         ..checks = null
         ..actionName = actionName
+        ..message = message
         ..groups = null
         ..commands = CommandsStructBuilder()
         ..emails = null,

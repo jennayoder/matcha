@@ -65,6 +65,13 @@ class _$ActionsRecordSerializer implements StructuredSerializer<ActionsRecord> {
             specifiedType:
                 const FullType(BuiltList, const [const FullType(String)])));
     }
+    value = object.message;
+    if (value != null) {
+      result
+        ..add('message')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }        
     value = object.ffRef;
     if (value != null) {
       result
@@ -116,6 +123,10 @@ class _$ActionsRecordSerializer implements StructuredSerializer<ActionsRecord> {
                       BuiltList, const [const FullType(String)]))!
               as BuiltList<Object?>);
           break;
+        case 'message':
+          result.message = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break; 
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -141,6 +152,8 @@ class _$ActionsRecord extends ActionsRecord {
   @override
   final BuiltList<String>? emails;
   @override
+  final String? message;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$ActionsRecord([void Function(ActionsRecordBuilder)? updates]) =>
@@ -152,6 +165,7 @@ class _$ActionsRecord extends ActionsRecord {
       this.groups,
       required this.commands,
       this.emails,
+      this.message,
       this.ffRef})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
@@ -174,6 +188,7 @@ class _$ActionsRecord extends ActionsRecord {
         groups == other.groups &&
         commands == other.commands &&
         emails == other.emails &&
+        message == other.message &&
         ffRef == other.ffRef;
   }
 
@@ -185,6 +200,7 @@ class _$ActionsRecord extends ActionsRecord {
     _$hash = $jc(_$hash, groups.hashCode);
     _$hash = $jc(_$hash, commands.hashCode);
     _$hash = $jc(_$hash, emails.hashCode);
+    _$hash = $jc(_$hash, message.hashCode);
     _$hash = $jc(_$hash, ffRef.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
@@ -198,6 +214,7 @@ class _$ActionsRecord extends ActionsRecord {
           ..add('groups', groups)
           ..add('commands', commands)
           ..add('emails', emails)
+          ..add('message', message)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -225,6 +242,10 @@ class ActionsRecordBuilder
   String? get actionName => _$this._actionName;
   set actionName(String? actionName) => _$this._actionName = actionName;
 
+  String? _message;
+  String? get message => _$this._message;
+  set message(String? message) => _$this._message = message;
+
   ListBuilder<DocumentReference<Object?>>? _groups;
   ListBuilder<DocumentReference<Object?>> get groups =>
       _$this._groups ??= new ListBuilder<DocumentReference<Object?>>();
@@ -249,6 +270,7 @@ class ActionsRecordBuilder
     if ($v != null) {
       _checks = $v.checks?.toBuilder();
       _actionName = $v.actionName;
+      _message = $v.message;
       _groups = $v.groups?.toBuilder();
       _commands = $v.commands.toBuilder();
       _emails = $v.emails?.toBuilder();
@@ -280,6 +302,7 @@ class ActionsRecordBuilder
           new _$ActionsRecord._(
               checks: _checks?.build(),
               actionName: actionName,
+              message: message,
               groups: _groups?.build(),
               commands: commands.build(),
               emails: _emails?.build(),

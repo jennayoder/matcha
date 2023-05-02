@@ -19,6 +19,9 @@ abstract class ScannedItemsRecord
 
   String? get qrID;
 
+  String? get message;
+
+
   String? get type;
 
   DocumentReference? get owner;
@@ -32,6 +35,7 @@ abstract class ScannedItemsRecord
   static void _initializeBuilder(ScannedItemsRecordBuilder builder) => builder
     ..name = ''
     ..qrID = ''
+    ..message = ''
     ..type = ''
     ..variables = ListBuilder();
 
@@ -62,6 +66,7 @@ Map<String, dynamic> createScannedItemsRecordData({
   DateTime? dateAdded,
   DocumentReference? typeRef,
   String? qrID,
+  String? message,
   String? type,
   DocumentReference? owner,
 }) {
@@ -73,6 +78,7 @@ Map<String, dynamic> createScannedItemsRecordData({
         ..dateAdded = dateAdded
         ..typeRef = typeRef
         ..qrID = qrID
+        ..message = message
         ..type = type
         ..owner = owner
         ..variables = null,

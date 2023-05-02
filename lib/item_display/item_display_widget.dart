@@ -1,4 +1,6 @@
 import 'package:matcha/items_page/items_page_widget.dart';
+import 'package:matcha/index.dart';
+
 
 import '/auth/auth_util.dart';
 import '/backend/backend.dart';
@@ -47,6 +49,8 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _unfocusNode = FocusNode();
+
+  final functions = FirebaseFunctions.instance;
 
   @override
   void initState() {
@@ -339,16 +343,35 @@ class _ItemDisplayWidgetState extends State<ItemDisplayWidget> {
 
                                     // Send email
                                     if (listViewActionsRecord.commands.sendEmail!) {
-                                      await Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => SendEmailWidget(
-                                            actionName: listViewActionsRecord.actionName,
-                                            emails: listViewActionsRecord.emails!.toList(),
-                                            itemRef: itemDisplayScannedItemsRecord.reference,
-                                          ),
-                                        ),
-                                      );
+                                      // await Navigator.push(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (context) => SendEmailWidget(
+                                      //       actionName: listViewActionsRecord.actionName,
+                                      //       emails: listViewActionsRecord.emails!.toList(),
+                                      //       itemRef: itemDisplayScannedItemsRecord.reference,
+                                      //     ),
+                                      //   ),
+                                      // );
+
+                                      try {
+                                        await FirebaseFunctions.instance.httpsCallable('commandEmail').call(
+                                          {
+                                            "emails": listViewActionsRecord.emails!.toList(),
+                                            "currentUser": currentUserEmail,
+                                            "action": widget.actionName,
+                                            "message":  listViewActionsRecord.message,
+                                            "qrID": itemDisplayScannedItemsRecord.qrID,
+                                            "itemName": itemDisplayScannedItemsRecord.name,
+                                          },
+                                        );
+                                        //  _response = result.data as String;
+                                      } on FirebaseFunctionsException catch (error) {
+                                        print(error.code);
+                                        print(error.details);
+                                        print(error.message);
+                                        }
+                                        print("sent email");
                                     }
                                     setState(() {});
                                   },

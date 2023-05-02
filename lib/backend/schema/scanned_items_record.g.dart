@@ -51,6 +51,13 @@ class _$ScannedItemsRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.message;
+    if (value != null) {
+      result
+        ..add('message')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.type;
     if (value != null) {
       result
@@ -115,6 +122,10 @@ class _$ScannedItemsRecordSerializer
           result.qrID = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+          case 'message':
+          result.message = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'type':
           result.type = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
@@ -154,6 +165,8 @@ class _$ScannedItemsRecord extends ScannedItemsRecord {
   @override
   final String? qrID;
   @override
+  final String? message;
+  @override
   final String? type;
   @override
   final DocumentReference<Object?>? owner;
@@ -171,6 +184,7 @@ class _$ScannedItemsRecord extends ScannedItemsRecord {
       this.dateAdded,
       this.typeRef,
       this.qrID,
+      this.message,
       this.type,
       this.owner,
       this.variables,
@@ -194,6 +208,7 @@ class _$ScannedItemsRecord extends ScannedItemsRecord {
         dateAdded == other.dateAdded &&
         typeRef == other.typeRef &&
         qrID == other.qrID &&
+        message == other.message &&
         type == other.type &&
         owner == other.owner &&
         variables == other.variables &&
@@ -206,10 +221,11 @@ class _$ScannedItemsRecord extends ScannedItemsRecord {
         $jc(
             $jc(
                 $jc(
-                    $jc(
+                    $jc( $jc(
                         $jc($jc($jc(0, name.hashCode), dateAdded.hashCode),
                             typeRef.hashCode),
                         qrID.hashCode),
+                        message.hashCode),
                     type.hashCode),
                 owner.hashCode),
             variables.hashCode),
@@ -223,6 +239,7 @@ class _$ScannedItemsRecord extends ScannedItemsRecord {
           ..add('dateAdded', dateAdded)
           ..add('typeRef', typeRef)
           ..add('qrID', qrID)
+          ..add('message', message)
           ..add('type', type)
           ..add('owner', owner)
           ..add('variables', variables)
@@ -250,6 +267,10 @@ class ScannedItemsRecordBuilder
   String? _qrID;
   String? get qrID => _$this._qrID;
   set qrID(String? qrID) => _$this._qrID = qrID;
+
+  String? _message;
+  String? get message => _$this._message;
+  set message(String? message) => _$this._message = message;
 
   String? _type;
   String? get type => _$this._type;
@@ -280,6 +301,7 @@ class ScannedItemsRecordBuilder
       _dateAdded = $v.dateAdded;
       _typeRef = $v.typeRef;
       _qrID = $v.qrID;
+      _message = $v.message;
       _type = $v.type;
       _owner = $v.owner;
       _variables = $v.variables?.toBuilder();
@@ -312,6 +334,7 @@ class ScannedItemsRecordBuilder
               dateAdded: dateAdded,
               typeRef: typeRef,
               qrID: qrID,
+              message: message,
               type: type,
               owner: owner,
               variables: _variables?.build(),

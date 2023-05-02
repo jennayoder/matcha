@@ -9,12 +9,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ItemDisplayModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Backend Call - Create Document] action in Button widget.
   LogsRecord? logRef;
+
+  String? Function(BuildContext, String?)? emailMessageControllerValidator;
 
   /// Initialization and disposal methods.
 

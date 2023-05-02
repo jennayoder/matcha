@@ -217,7 +217,6 @@ class _SendEmailWidgetState extends State<SendEmailWidget> {
                                       "emails": widget.emails,
                                       "currentUser": currentUserEmail,
                                       "action": widget.actionName,
-                                      "message": _model.emailMessageController.text,
                                     },
                                   );
                                   //  _response = result.data as String;
