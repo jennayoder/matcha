@@ -50,6 +50,7 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
     _model.newVariableController ??= TextEditingController();
     _model.addVarController ??= TextEditingController();
     _model.removeVarController ??= TextEditingController();
+    _model.addMessageController ??= TextEditingController();
   }
 
   @override
@@ -1133,6 +1134,164 @@ class _EditActionsWidgetState extends State<EditActionsWidget> {
                             }),
                           );
                         },
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(15, 15, 15, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Add email message:',
+                                style: FlutterFlowTheme.of(context)
+                                    .subtitle2
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(15, 5, 15, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _model.addMessageController,
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                  labelText: 'Add message',
+                                  labelStyle:
+                                      FlutterFlowTheme.of(context).subtitle2,
+                                  hintText: 'Enter message here',
+                                  hintStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Urbanist',
+                                        fontSize: 12,
+                                      ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          FlutterFlowTheme.of(context).lineGray,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0x00000000),
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  filled: true,
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  contentPadding:
+                                      EdgeInsetsDirectional.fromSTEB(
+                                          16, 18, 0, 18),
+                                ),
+                                style: FlutterFlowTheme.of(context).title1,
+                                validator: _model.addMessageControllerValidator
+                                    .asValidator(context),
+                              ),
+                            ),
+                            FlutterFlowIconButton(
+                              borderColor: Colors.transparent,
+                              borderRadius: 30,
+                              borderWidth: 1,
+                              buttonSize: 60,
+                              icon: Icon(
+                                Icons.add,
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                size: 30,
+                              ),
+                              onPressed: () async {
+                                final actionsUpdateData =
+                                    createActionsRecordData(
+                                  message: _model.addMessageController.text,
+                                );
+                                await widget.actionRef!
+                                    .update(actionsUpdateData);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(15, 0, 30, 0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onLongPress: () async {
+                                        final actionsUpdateData = {
+                                          'message': FieldValue.delete(),
+                                        };
+                                        await editActionsActionsRecord.reference
+                                            .update(actionsUpdateData);
+                                      },
+                                      child: Card(
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  15, 3, 0, 3),
+                                          child: Text(
+                                            editActionsActionsRecord.message!,
+                                            style: FlutterFlowTheme.of(context)
+                                                .subtitle2
+                                                .override(
+                                                  fontFamily: 'Urbanist',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 20,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

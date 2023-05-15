@@ -44,6 +44,9 @@ class EditActionsModel extends FlutterFlowModel {
   // State field(s) for removeVar widget.
   TextEditingController? removeVarController;
   String? Function(BuildContext, String?)? removeVarControllerValidator;
+  // State field(s) for addMessage widget.
+  TextEditingController? addMessageController;
+  String? Function(BuildContext, String?)? addMessageControllerValidator;
 
   /// Initialization and disposal methods.
 
@@ -54,6 +57,7 @@ class EditActionsModel extends FlutterFlowModel {
     newVariableController?.dispose();
     addVarController?.dispose();
     removeVarController?.dispose();
+    addMessageController?.dispose();
   }
 
   /// Additional helper methods are added here.
